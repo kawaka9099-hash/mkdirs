@@ -2,14 +2,14 @@ import type { HeroConfig } from "@/types";
 
 export const heroConfig: HeroConfig = {
   title: {
-    first: "The Best",
-    second: "Directory Website Template",
+    first: "发现国内",
+    second: "优质一人公司",
   },
   subtitle:
-    "This is a demo directory website built with Mkdirs",
+    "CN OPC 收录国内优质一人公司、独立开发者与自由职业者",
   label: {
-    text: "Introducing Mkdirs on",
-    href: "https://x.com/javayhu",
-    icon: "twitter",
+    text: "收录你的公司",
+    href: "/submit",
+    icon: "submit",
   },
 };

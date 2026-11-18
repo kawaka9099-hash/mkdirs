@@ -3,41 +3,36 @@ import type { SiteConfig } from "@/types";
 const SITE_URL = process.env.NEXT_PUBLIC_APP_URL;
 
 export const siteConfig: SiteConfig = {
-  name: "Directory",
-  tagline:
-    "This is a demo site for Mkdirs, the best directory website template",
+  name: "CN OPC",
+  tagline: "收录国内优质一人公司",
   description:
-    "This is a demo site for Mkdirs template. Mkdirs is the ultimate directory website template. With Mkdirs, you can build any trending and profitable directory website in minutes, packed with Listings, Newsletter, Payment, CMS, Blog, Authentication, SEO, Themes and more",
+    "CN OPC 收录国内优质一人公司：独立开发者、自由职业者与一人团队，一个人也能做出好产品",
   keywords: [
-    "Directory",
-    "Template",
-    "Boilerplate",
-    "Next.js",
-    "Auth.js",
-    "Tailwindcss",
-    "Shadcn/ui",
-    "Resend",
-    "Sanity",
-    "Stripe",
-    "Vercel",
+    "一人公司",
+    "OPC",
+    "独立开发",
+    "自由职业",
+    "收录",
+    "导航",
+    "CN OPC",
   ],
-  author: "Mkdirs",
+  author: "CN OPC",
   url: SITE_URL,
   logo: "/logo.png",
   // set the logoDark if you have put the logo-dark.png in the public folder
   // logoDark: "/logo-dark.png",
   // please increase the version number when you update the image
   image: `${SITE_URL}/og.png?v=1`,
-  mail: "support@mkdirs.com",
+  mail: "kawaka9099@gmail.com",
   utm: {
-    source: "mkdirs.com",
+    source: "cn-opc",
     medium: "referral",
     campaign: "navigation",
   },
   links: {
     // leave it blank if you don't want to show the link (don't delete)
-    twitter: "https://x.com/MkdirsHQ",
-    github: "https://github.com/MkdirsHQ",
-    youtube: "https://www.youtube.com/@MkdirsHQ",
+    twitter: "",
+    github: "",
+    youtube: "",
   },
 };
