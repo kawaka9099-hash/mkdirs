@@ -1,6 +1,7 @@
 import { PricePlans } from "@/lib/submission";
 import { format, parseISO } from "date-fns";
 import type { SanityImageAssetDocument } from "next-sanity";
+import { orderRankField, orderRankOrdering } from "@sanity/orderable-document-list";
 import { defineField, defineType } from "sanity";
 
 export default defineType({
@@ -316,6 +317,11 @@ export default defineType({
       type: "string",
       group: "sponsor",
     }),
+    // Manual drag ordering in Studio (orderable-document-list plugin).
+    // Hidden field; set when dragging in the "Items Order" list.
+    // New items get a rank automatically (appended at the end).
+    // Frontend item lists sort by this first, then by date.
+    orderRankField({ type: "item" }),
   ],
   // https://www.sanity.io/docs/previews-list-views
   // Configure and customize how documents are displayed
@@ -360,6 +366,7 @@ export default defineType({
     },
   },
   orderings: [
+    orderRankOrdering,
     {
       title: "Publish Date (Newest)",
       name: "dateDesc",

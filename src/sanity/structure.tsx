@@ -23,6 +23,8 @@ import {
 } from "@sanity/icons";
 import type { DocumentDefinition } from "sanity";
 import type { StructureResolver } from "sanity/structure";
+import { createBulkActionsTable } from "sanity-plugin-bulk-actions-table";
+import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list";
 import { schemaTypes } from "./schemas";
 import account from "./schemas/documents/auth/account";
 import passwordResetToken from "./schemas/documents/auth/password-reset-token";
@@ -46,7 +48,7 @@ const singletonTypes: DocumentDefinition[] = [settings];
 export const structure = (
   /* typeDefArray: DocumentDefinition[] */
 ): StructureResolver => {
-  return (S) => {
+  return (S, context) => {
     // Goes through all of the singletons and translates them into something the Structure tool can understand
     const singletonItems = singletonTypes.map((singletonType) => {
       return S.listItem()
@@ -348,6 +350,20 @@ export const structure = (
           .child(
             S.list().title("Item management").items([
               allItems,
+              // Bulk actions table: publish / unpublish / delete many items at once
+              createBulkActionsTable({
+                type: item.name,
+                S,
+                context,
+                title: "Items Table",
+              }),
+              // Drag to reorder items; frontend lists follow this order first
+              orderableDocumentListDeskItem({
+                type: item.name,
+                S,
+                context,
+                title: "Items Order",
+              }),
               freePlanItemManagement,
               proPlanItemManagement,
               S.divider(),

@@ -119,7 +119,7 @@ export const itemListQuery = defineQuery(`*[_type == "item" && defined(slug.curr
   && defined(publishDate)
   && forceHidden != true
   && sponsor != true]
-  | order(coalesce(featured, false) desc, publishDate desc) {
+  | order(coalesce(orderRank, "zzzzzzzz") asc, coalesce(featured, false) desc, publishDate desc) {
     ${itemSimpleFields}
 }`);
 
@@ -130,7 +130,7 @@ export const sponsorItemListQuery = defineQuery(`*[_type == "item" && defined(sl
   && sponsor == true
   && sponsorStartDate <= now()
   && sponsorEndDate >= now()] 
-  | order(coalesce(featured, false) desc, publishDate desc) {
+  | order(coalesce(orderRank, "zzzzzzzz") asc, coalesce(featured, false) desc, publishDate desc) {
     ${itemSimpleFields}
 }`);
 
@@ -139,7 +139,7 @@ export const itemListOfFeaturedQuery = defineQuery(`*[_type == "item" && defined
   && forceHidden != true 
   && sponsor != true
   && featured == true] 
-  | order(coalesce(featured, false) desc, publishDate desc) [0...$count] {
+  | order(coalesce(orderRank, "zzzzzzzz") asc, coalesce(featured, false) desc, publishDate desc) [0...$count] {
     ${itemSimpleFields}
 }`);
 
@@ -147,7 +147,7 @@ export const itemListOfLatestQuery = defineQuery(`*[_type == "item" && defined(s
   && defined(publishDate) 
   && forceHidden != true
   && sponsor != true] 
-  | order(coalesce(featured, false) desc, publishDate desc) [0...$count] {
+  | order(coalesce(orderRank, "zzzzzzzz") asc, coalesce(featured, false) desc, publishDate desc) [0...$count] {
     ${itemSimpleFields}
 }`);
 
@@ -225,7 +225,7 @@ export const itemListByCollectionIdQuery = defineQuery(`*[_type == "item" && ref
   && defined(publishDate)
   && forceHidden != true
   && sponsor != true]
-  | order(publishDate desc) [0...$count] {
+  | order(coalesce(orderRank, "zzzzzzzz") asc, publishDate desc) [0...$count] {
     ${itemSimpleFields}
 }`);
 
