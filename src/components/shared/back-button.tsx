@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/i18n/language-provider";
 import { cn } from "@/lib/utils";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
@@ -11,6 +12,7 @@ interface BackButtonProps {
 }
 
 export default function BackButton({ className }: BackButtonProps) {
+  const { t } = useLanguage();
   const router = useRouter();
 
   const handleBack = () => {
@@ -29,7 +31,7 @@ export default function BackButton({ className }: BackButtonProps) {
           className="w-5 h-5 
                     transition-transform duration-200 group-hover:-translate-x-1"
         />
-        <span>Back</span>
+        <span>{t("common.back")}</span>
       </Link>
     </Button>
   );

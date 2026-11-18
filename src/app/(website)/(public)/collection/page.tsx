@@ -6,6 +6,7 @@ import CustomPagination from "@/components/shared/pagination";
 import { siteConfig } from "@/config/site";
 import { getCollections } from "@/data/collection";
 import { COLLECTIONS_PER_PAGE } from "@/lib/constants";
+import { getServerT } from "@/i18n/server";
 import { constructMetadata } from "@/lib/metadata";
 
 export const metadata = constructMetadata({
@@ -23,6 +24,7 @@ export default async function CollectionIndexPage({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
+  const { dict } = await getServerT();
   const { page } = searchParams as { [key: string]: string };
   const currentPage = page ? Number(page) : 1;
   const { collections, totalCount } = await getCollections({
@@ -42,9 +44,9 @@ export default async function CollectionIndexPage({
         <div className="w-full flex flex-col items-center justify-center gap-8">
           <HeaderSection
             labelAs="h1"
-            label="Collection"
+            label={dict.misc.collection}
             titleAs="h2"
-            title="Explore by collections"
+            title={dict.misc.exploreCollections}
           />
         </div>
       </div>

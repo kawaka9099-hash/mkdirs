@@ -3,8 +3,10 @@
 import { LoginWrapper } from "@/components/auth/login-button";
 import Container from "@/components/container";
 import { Icons } from "@/components/icons/icons";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { ModeToggle } from "@/components/layout/mode-toggle";
 import { UserButton } from "@/components/layout/user-button";
+import { useLanguage } from "@/i18n/language-provider";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -31,9 +33,29 @@ interface NavBarProps {
   config: DashboardConfig | MarketingConfig;
 }
 
+// Navbar menu labels come from the language dictionary, keyed by href.
+// Config titles stay as the fallback for any menu not listed here.
+const MENU_LABEL_BY_HREF: Record<string, string> = {
+  "/home2": "nav.home2",
+  "/home3": "nav.home3",
+  "/search": "nav.search",
+  "/collection": "nav.collection",
+  "/category": "nav.category",
+  "/tag": "nav.tag",
+  "/blog": "nav.blog",
+  "/pricing": "nav.pricing",
+  "/submit": "nav.submit",
+  "/studio": "nav.studio",
+  "/dashboard": "nav.dashboard",
+  "/settings": "nav.settings",
+};
+
 export function Navbar({ scroll = false, config }: NavBarProps) {
   const scrolled = useScroll(50);
   const user = useCurrentUser();
+  const { t } = useLanguage();
+  const menuLabel = (item: { title: string; href: string }) =>
+    t(MENU_LABEL_BY_HREF[item.href] ?? item.title);
   // console.log(`navbar: user:`, user);
 
   const pathname = usePathname();
@@ -96,7 +118,7 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
                           item.disabled && "cursor-not-allowed opacity-80",
                         )}
                       >
-                        {item.title}
+                        {menuLabel(item)}
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                   ))}
@@ -107,6 +129,7 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
 
           {/* navbar right show sign in or account */}
           <div className="flex items-center gap-x-4">
+            <LanguageSwitcher />
             {user ? (
               <div className="flex items-center">
                 <UserButton />
@@ -118,7 +141,7 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
                   variant="default"
                   size="default"
                 >
-                  <span>Sign In</span>
+                  <span>{t("nav.signIn")}</span>
                   <ArrowRightIcon className="size-4" />
                 </Button>
               </LoginWrapper>
@@ -179,7 +202,7 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
                           )}
                         >
                           <Icon className="size-5" />
-                          {item.title}
+                          {menuLabel(item)}
                         </Link>
                       );
                     })}
@@ -202,6 +225,7 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
 
           {/* mobile navbar right show sign in or account */}
           <div className="flex items-center gap-x-4">
+            <LanguageSwitcher />
             {user ? (
               <div className="flex items-center">
                 <UserButton />
@@ -213,7 +237,7 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
                   variant="default"
                   size="default"
                 >
-                  <span>Sign In</span>
+                  <span>{t("nav.signIn")}</span>
                   <ArrowRightIcon className="size-4" />
                 </Button>
               </LoginWrapper>

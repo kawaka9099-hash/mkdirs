@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/i18n/language-provider";
 import { ResetSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
@@ -22,6 +23,7 @@ import type * as z from "zod";
 import { Icons } from "../icons/icons";
 
 export const ResetForm = () => {
+  const { t } = useLanguage();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -51,15 +53,15 @@ export const ResetForm = () => {
         })
         .catch((error) => {
           console.log("reset, error:", error);
-          setError("Something went wrong");
+          setError(t("auth.somethingWrong"));
         });
     });
   };
 
   return (
     <AuthCard
-      headerLabel="Froget password?"
-      bottomButtonLabel="Back to login"
+      headerLabel={t("misc.forgotPasswordTitle")}
+      bottomButtonLabel={t("misc.backLogin")}
       bottomButtonHref="/auth/login"
       className="border-none"
     >
@@ -71,7 +73,7 @@ export const ResetForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("auth.email")}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -98,7 +100,7 @@ export const ResetForm = () => {
             ) : (
               ""
             )}
-            <span>Send reset email</span>
+            <span>{t("misc.sendResetEmail")}</span>
           </Button>
         </form>
       </Form>

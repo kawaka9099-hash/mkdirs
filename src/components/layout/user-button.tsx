@@ -19,6 +19,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { userButtonConfig } from "@/config/user-button";
+import { useLanguage } from "@/i18n/language-provider";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { LogOutIcon } from "lucide-react";
@@ -27,7 +28,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+const USER_MENU_LABEL_BY_HREF: Record<string, string> = {
+  "/dashboard": "nav.dashboard",
+  "/settings": "nav.settings",
+  "/submit": "nav.submit",
+};
+
 export function UserButton() {
+  const { t } = useLanguage();
   const router = useRouter();
   const user = useCurrentUser();
   // console.log('UserButton, user:', user);
@@ -92,7 +100,9 @@ export function UserButton() {
                       className="flex w-full items-center gap-3 px-2.5 py-2"
                     >
                       <Icon className="size-4" />
-                      <p className="text-sm">{item.title}</p>
+                      <p className="text-sm">
+                        {t(USER_MENU_LABEL_BY_HREF[item.href] ?? item.title)}
+                      </p>
                     </Link>
                   </li>
                 );
@@ -114,7 +124,7 @@ export function UserButton() {
                   className="flex w-full items-center gap-3 px-2.5 py-2"
                 >
                   <LogOutIcon className="size-4" />
-                  <p className="text-sm">Log out</p>
+                  <p className="text-sm">{t("nav.logout")}</p>
                 </Link>
               </li>
             </ul>
@@ -160,7 +170,9 @@ export function UserButton() {
             >
               <div className="flex items-center space-x-2.5">
                 <Icon className="size-4" />
-                <p className="text-sm">{item.title}</p>
+                <p className="text-sm">
+                  {t(USER_MENU_LABEL_BY_HREF[item.href] ?? item.title)}
+                </p>
               </div>
             </DropdownMenuItem>
           );
@@ -180,7 +192,7 @@ export function UserButton() {
         >
           <div className="flex items-center space-x-2.5">
             <LogOutIcon className="size-4" />
-            <p className="text-sm">Log out</p>
+            <p className="text-sm">{t("nav.logout")}</p>
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

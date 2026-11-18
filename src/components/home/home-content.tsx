@@ -3,6 +3,7 @@ import type {
   CollectionQueryResult,
   ItemListQueryResult,
 } from "@/sanity.types";
+import { getServerT } from "@/i18n/server";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import {
   type CategoryWithCount,
@@ -87,6 +88,7 @@ function HomeItemGrid({ items }: { items: ItemListQueryResult }) {
 }
 
 export async function HomeContent() {
+  const { dict } = await getServerT();
   const [
     latestItems,
     featuredItems,
@@ -144,9 +146,9 @@ export async function HomeContent() {
         <section className="flex flex-col gap-6">
           <SectionHeader
             icon={<SparklesIcon className="w-4 h-4 text-teal-600" />}
-            title="最新收录"
+            title={dict.home.latest}
             moreHref="/search"
-            moreText="查看全部收录"
+            moreText={dict.home.viewAllItems}
           />
           <HomeItemGrid items={latest} />
         </section>
@@ -157,9 +159,9 @@ export async function HomeContent() {
         <section className="flex flex-col gap-6">
           <SectionHeader
             icon={<FlameIcon className="w-4 h-4 text-teal-600" />}
-            title="最热收录"
+            title={dict.home.hot}
             moreHref="/search"
-            moreText="查看全部收录"
+            moreText={dict.home.viewAllItems}
           />
           <HomeItemGrid items={hotItems} />
         </section>
@@ -170,9 +172,9 @@ export async function HomeContent() {
         <section className="flex flex-col gap-6">
           <SectionHeader
             icon={<LayoutGridIcon className="w-4 h-4 text-teal-600" />}
-            title="分类浏览"
+            title={dict.home.categories}
             moreHref="/category"
-            moreText="全部分类"
+            moreText={dict.home.viewAllCategories}
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {categoryList.map((category) => (
@@ -187,8 +189,8 @@ export async function HomeContent() {
                   </h3>
                   <span className="text-sm text-muted-foreground shrink-0">
                     {category.count > 0
-                      ? `${category.count} 家收录`
-                      : "暂未收录"}
+                      ? dict.home.countItems.replace("{n}", String(category.count))
+                      : dict.home.noItems}
                   </span>
                 </div>
                 {category.description && (
@@ -207,9 +209,9 @@ export async function HomeContent() {
         <section className="flex flex-col gap-6">
           <SectionHeader
             icon={<StarIcon className="w-4 h-4 text-teal-600" />}
-            title="编辑精选"
+            title={dict.home.picks}
             moreHref="/search"
-            moreText="查看全部收录"
+            moreText={dict.home.viewAllItems}
           />
           <HomeItemGrid items={picksItems} />
         </section>
@@ -220,9 +222,9 @@ export async function HomeContent() {
         <section className="flex flex-col gap-6">
           <SectionHeader
             icon={<FileTextIcon className="w-4 h-4 text-teal-600" />}
-            title="最新文章"
+            title={dict.home.posts}
             moreHref="/blog"
-            moreText="全部文章"
+            moreText={dict.home.viewAllPosts}
           />
           <BlogGrid posts={posts} />
         </section>

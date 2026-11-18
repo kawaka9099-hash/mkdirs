@@ -5,10 +5,12 @@ import { AuthCard } from "@/components/auth/auth-card";
 import { Icons } from "@/components/icons/icons";
 import { FormError } from "@/components/shared/form-error";
 import { FormSuccess } from "@/components/shared/form-success";
+import { useLanguage } from "@/i18n/language-provider";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 export const NewVerificationForm = () => {
+  const { t } = useLanguage();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
 
@@ -19,7 +21,7 @@ export const NewVerificationForm = () => {
     if (success || error) return;
 
     if (!token) {
-      setError("Missing token!");
+      setError(t("misc.missingToken"));
       return;
     }
 
@@ -35,7 +37,7 @@ export const NewVerificationForm = () => {
         }
       })
       .catch(() => {
-        setError("Something went wrong");
+        setError(t("auth.somethingWrong"));
       });
   }, [token, success, error]);
 
@@ -45,8 +47,8 @@ export const NewVerificationForm = () => {
 
   return (
     <AuthCard
-      headerLabel="Confirming your verification"
-      bottomButtonLabel="Back to login"
+      headerLabel={t("misc.confirmingVerification")}
+      bottomButtonLabel={t("misc.backLogin")}
       bottomButtonHref="/auth/login"
       className="border-none"
     >

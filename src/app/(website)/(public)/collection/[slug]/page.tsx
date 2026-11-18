@@ -10,6 +10,7 @@ import {
   ITEMS_PER_PAGE,
   SORT_FILTER_LIST,
 } from "@/lib/constants";
+import { getServerT } from "@/i18n/server";
 import { constructMetadata } from "@/lib/metadata";
 import type {
   CollectionQueryResult,
@@ -56,6 +57,7 @@ export default async function CollectionPage({
   params: { slug: string };
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
+  const { dict } = await getServerT();
   const collection = await sanityFetch<CollectionQueryResult>({
     query: collectionQuery,
     params: { slug: params.slug },
@@ -100,7 +102,7 @@ export default async function CollectionPage({
         <div className="w-full flex flex-col items-center justify-center gap-8">
           <HeaderSection
             labelAs="h1"
-            label="Collection"
+            label={dict.misc.collection}
             titleAs="h2"
             title={`${collection?.name}`}
           />

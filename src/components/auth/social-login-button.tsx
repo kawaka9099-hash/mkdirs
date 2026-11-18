@@ -1,6 +1,7 @@
 "use client";
 
 import { Icons } from "@/components/icons/icons";
+import { useLanguage } from "@/i18n/language-provider";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { signIn } from "next-auth/react";
@@ -13,6 +14,7 @@ import { FaBrandsGoogle } from "../icons/google";
  * social login buttons
  */
 export const SocialLoginButton = () => {
+  const { t } = useLanguage();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
   const [isLoading, setIsLoading] = useState<"google" | "github" | null>(null);
@@ -40,7 +42,7 @@ export const SocialLoginButton = () => {
         ) : (
           <FaBrandsGoogle className="size-5 mr-2" />
         )}
-        <span>Login with Google</span>
+        <span>{t("auth.loginGoogle")}</span>
       </Button>
       <Button
         size="lg"
@@ -54,7 +56,7 @@ export const SocialLoginButton = () => {
         ) : (
           <FaBrandsGitHub className="size-5 mr-2" />
         )}
-        <span>Login with GitHub</span>
+        <span>{t("auth.loginGithub")}</span>
       </Button>
     </div>
   );

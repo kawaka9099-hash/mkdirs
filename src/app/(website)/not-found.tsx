@@ -1,8 +1,10 @@
 import { Logo } from "@/components/logo";
+import { getServerT } from "@/i18n/server";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export default function NotFound() {
+export default async function NotFound() {
+  const { t } = await getServerT();
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-8">
       <Logo className="size-12" />
@@ -14,7 +16,7 @@ export default function NotFound() {
       </p>
 
       <Button asChild size="lg" variant="default">
-        <Link href="/">Back to home</Link>
+        <Link href="/">{t("misc.backHome")}</Link>
       </Button>
     </div>
   );

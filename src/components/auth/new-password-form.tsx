@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/i18n/language-provider";
 import { NewPasswordSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
@@ -23,6 +24,7 @@ import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
 export const NewPasswordForm = () => {
+  const { t } = useLanguage();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
@@ -56,15 +58,15 @@ export const NewPasswordForm = () => {
         })
         .catch(() => {
           console.log("newPassword, error:", error);
-          setError("Something went wrong");
+          setError(t("auth.somethingWrong"));
         });
     });
   };
 
   return (
     <AuthCard
-      headerLabel="Reset password"
-      bottomButtonLabel="Back to login"
+      headerLabel={t("misc.resetPasswordTitle")}
+      bottomButtonLabel={t("misc.backLogin")}
       bottomButtonHref="/auth/login"
       className="border-none"
     >
@@ -76,7 +78,7 @@ export const NewPasswordForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t("auth.password")}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -103,7 +105,7 @@ export const NewPasswordForm = () => {
             ) : (
               ""
             )}
-            <span>Reset password</span>
+            <span>{t("misc.resetPasswordTitle")}</span>
           </Button>
         </form>
       </Form>

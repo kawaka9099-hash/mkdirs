@@ -2,6 +2,7 @@
 
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/i18n/language-provider";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
@@ -12,6 +13,7 @@ import { useTransition } from "react";
  * https://x.com/asidorenko_/status/1841547623712407994
  */
 export default function ErrorPage({ reset }: { reset: () => void }) {
+  const { t } = useLanguage();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -19,7 +21,7 @@ export default function ErrorPage({ reset }: { reset: () => void }) {
     <div className="flex min-h-screen flex-col items-center justify-center gap-8">
       <Logo className="size-12" />
 
-      <h1 className="text-2xl text-center">Oops! Something went wrong!</h1>
+      <h1 className="text-2xl text-center">{t("misc.oops")}</h1>
 
       <div className="flex items-center gap-4">
         <Button
@@ -38,7 +40,7 @@ export default function ErrorPage({ reset }: { reset: () => void }) {
           ) : (
             ""
           )}
-          Try again
+          {t("misc.tryAgainBtn")}
         </Button>
 
         <Button
@@ -46,7 +48,7 @@ export default function ErrorPage({ reset }: { reset: () => void }) {
           variant="outline"
           onClick={() => router.push("/")}
         >
-          Back to home
+          {t("misc.backHome")}
         </Button>
       </div>
     </div>

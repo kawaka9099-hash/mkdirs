@@ -2,6 +2,7 @@ import { Icons } from "@/components/icons/icons";
 import { ModeToggle } from "@/components/layout/mode-toggle";
 import { footerConfig } from "@/config/footer";
 import { siteConfig } from "@/config/site";
+import { getServerT } from "@/i18n/server";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import type * as React from "react";
@@ -9,7 +10,37 @@ import Container from "../container";
 import { Logo } from "../logo";
 import BuiltWithButton from "../shared/built-with-button";
 
-export function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
+// Footer link titles come from the language dictionary, keyed by the
+// English title in the config. Config titles stay as the fallback.
+const SECTION_LABEL_BY_TITLE: Record<string, string> = {
+  Product: "footer.product",
+  Resources: "footer.resources",
+  Pages: "footer.pages",
+  Company: "footer.company",
+};
+
+const LINK_LABEL_BY_TITLE: Record<string, string> = {
+  Search: "footer.search",
+  Collection: "footer.collection",
+  Category: "footer.category",
+  Tag: "footer.tag",
+  Blog: "footer.blog",
+  Pricing: "footer.pricing",
+  Submit: "footer.submit",
+  Studio: "footer.studio",
+  "Home 2": "footer.home2",
+  "Home 3": "footer.home3",
+  "Collection 1": "footer.collection1",
+  "Collection 2": "footer.collection2",
+  "About Us": "footer.about",
+  "Privacy Policy": "footer.privacy",
+  "Terms of Service": "footer.terms",
+  Sitemap: "footer.sitemap",
+};
+
+export async function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
+  const { t } = await getServerT();
+
   return (
     <footer className={cn("border-t", className)}>
       <Container className="grid grid-cols-2 gap-8 py-12 md:grid-cols-6">
@@ -22,7 +53,7 @@ export function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
             </div>
 
             <p className="text-muted-foreground text-base p4-4 md:pr-12">
-              {siteConfig.tagline}
+              {t("footer.tagline")}
             </p>
 
             <div className="flex items-center gap-2">
@@ -82,7 +113,7 @@ export function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
             className="col-span-1 md:col-span-1 items-start"
           >
             <span className="text-sm font-semibold uppercase">
-              {section.title}
+              {t(SECTION_LABEL_BY_TITLE[section.title] ?? section.title)}
             </span>
             <ul className="mt-4 list-inside space-y-3">
               {section.items?.map(
@@ -94,7 +125,7 @@ export function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
                         target={link.external ? "_blank" : undefined}
                         className="text-sm text-muted-foreground hover:text-primary"
                       >
-                        {link.title}
+                        {t(LINK_LABEL_BY_TITLE[link.title] ?? link.title)}
                       </Link>
                     </li>
                   ),
@@ -107,7 +138,7 @@ export function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
       <div className="border-t py-4">
         <Container className="flex items-center justify-between">
           <span className="text-muted-foreground text-sm">
-            Copyright &copy; {new Date().getFullYear()} All Rights Reserved.
+            Copyright &copy; {new Date().getFullYear()} {t("footer.copyright")}
           </span>
 
           <div className="flex items-center gap-3">

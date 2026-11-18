@@ -9,6 +9,7 @@ import { siteConfig } from "@/config/site";
 import { urlForIcon, urlForImage } from "@/lib/image";
 import { constructMetadata } from "@/lib/metadata";
 import { cn, getItemTargetLinkInWebsite, getLocaleDate } from "@/lib/utils";
+import { getServerT } from "@/i18n/server";
 import type {
   ItemInfoBySlugQueryResult,
   SponsorItemListQueryResult,
@@ -54,6 +55,7 @@ interface ItemPageProps {
 }
 
 export default async function ItemPage({ params }: ItemPageProps) {
+  const { dict } = await getServerT();
   // if you do not support sponsor item, you can use this code
   // const item = await sanityFetch<ItemFullInfo>({
   //   query: itemFullInfoBySlugQuery,
@@ -140,7 +142,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
                 className="flex items-center justify-center space-x-2"
               >
                 <GlobeIcon className="w-4 h-4 icon-scale" />
-                <span>Visit Website</span>
+                <span>{dict.item.visitWebsite}</span>
               </Link>
             </Button>
           </div>
@@ -178,7 +180,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
                   className="text-white text-lg font-semibold 
                     opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 >
-                  Visit Website
+                  {dict.item.visitWebsite}
                 </span>
               </div>
             </Link>
@@ -192,7 +194,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
         <div className="lg:col-span-3 flex flex-col">
           {/* Detailed content */}
           <div className="bg-muted/50 rounded-lg p-6 mr-0 lg:mr-8">
-            <h2 className="text-lg font-semibold mb-4">Introduction</h2>
+            <h2 className="text-lg font-semibold mb-4">{dict.item.introduction}</h2>
             <ItemCustomMdx source={item.introduction} />
           </div>
 
@@ -207,11 +209,11 @@ export default async function ItemPage({ params }: ItemPageProps) {
             <div className="flex flex-col space-y-4">
               {/* information */}
               <div className="bg-muted/50 rounded-lg p-6">
-                <h2 className="text-lg font-semibold mb-4">Information</h2>
+                <h2 className="text-lg font-semibold mb-4">{dict.item.information}</h2>
                 <ul className="space-y-4 text-sm">
                 {item.submitter && (
                     <li className="flex justify-between">
-                      <span className="text-muted-foreground">Publisher</span>
+                      <span className="text-muted-foreground">{dict.item.publisher}</span>
                       <div className="flex items-center gap-2">
                         <UserAvatar
                           className="w-5 h-5"
@@ -235,7 +237,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
                   )}
 
                   <li className="flex justify-between space-x-4">
-                    <span className="text-muted-foreground">Website</span>
+                    <span className="text-muted-foreground">{dict.item.website}</span>
                     <Link
                       href={itemLink}
                       target="_blank"
@@ -248,7 +250,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
 
                   <li className="flex justify-between">
                     <span className="text-muted-foreground">
-                      Published date
+                      {dict.item.publishedDate}
                     </span>
                     <span className="font-medium">{date}</span>
                   </li>
@@ -257,7 +259,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
 
               {/* categories */}
               <div className="bg-muted/50 rounded-lg p-6">
-                <h2 className="text-lg font-semibold mb-4">Categories</h2>
+                <h2 className="text-lg font-semibold mb-4">{dict.item.categories}</h2>
                 <ul className="flex flex-wrap gap-4">
                   {item.categories?.map((category) => (
                     <li key={category._id}>
@@ -274,7 +276,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
 
               {/* tags */}
               <div className="bg-muted/50 rounded-lg p-6">
-                <h2 className="text-lg font-semibold mb-4">Tags</h2>
+                <h2 className="text-lg font-semibold mb-4">{dict.item.tags}</h2>
                 <ul className="flex flex-wrap gap-4">
                   {item.tags?.map((tag) => (
                     <li key={tag._id}>
@@ -304,7 +306,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
           <div className="flex items-center gap-2">
             <LayoutGridIcon className="w-4 h-4 text-indigo-500" />
             <h2 className="text-lg tracking-wider font-semibold text-gradient_indigo-purple">
-              More Products
+              {dict.item.moreProducts}
             </h2>
           </div>
 

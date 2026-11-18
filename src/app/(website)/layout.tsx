@@ -10,6 +10,8 @@ import { auth } from "@/auth";
 import { Analytics } from "@/components/analytics/analytics";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { Toaster } from "@/components/ui/sonner";
+import { LanguageProvider } from "@/i18n/language-provider";
+import { getLocale } from "@/i18n/server";
 import { constructMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 import { SessionProvider } from "next-auth/react";
@@ -24,9 +26,10 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: RootLayoutProps) {
   // https://youtu.be/1MTyCvS05V4?t=21464
   const session = await auth();
+  const locale = await getLocale();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head />
       <body
         className={cn(
@@ -48,7 +51,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <LanguageProvider initialLocale={locale}>
+              {children}
+            </LanguageProvider>
 
             {/* https://sonner.emilkowal.ski/toaster */}
             <Toaster richColors position="top-right" offset={64} />

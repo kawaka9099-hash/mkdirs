@@ -2,11 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  DEFAULT_QUERY,
-  DEFAULT_SORT,
   type QueryFilterItem,
   type SortFilterItem,
 } from "@/lib/constants";
+import { useLanguage } from "@/i18n/language-provider";
 import { useRouter, useSearchParams } from "next/navigation";
 import { DEFAULT_FILTER_VALUE, ResponsiveComboBox } from "../shared/combobox";
 import { MultiSelect } from "../shared/multi-select";
@@ -52,6 +51,7 @@ export function SearchFilterClient({
   filterList,
   urlPrefix,
 }: SearchFilterProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("category");
@@ -74,7 +74,7 @@ export function SearchFilterClient({
   };
 
   const categoryFilterItemList = [
-    { value: DEFAULT_FILTER_VALUE, label: "All Categories" },
+    { value: DEFAULT_FILTER_VALUE, label: t("search.allCategories") },
     ...categoryList.map((item) => ({
       value: item.slug,
       label: item.name,
@@ -96,13 +96,25 @@ export function SearchFilterClient({
     })),
   ];
   // change default sort value to default filter value
+  // Sort / filter labels are translated by slug, not by the English label
+  // in constants.ts, so the dropdown follows the chosen language.
+  const sortLabelBySlug: Record<string, string> = {
+    "date-asc": t("search.sortTimeAsc"),
+    "name-desc": t("search.sortNameDesc"),
+    "name-asc": t("search.sortNameAsc"),
+  };
   const sortFilterItemList = sortList.map((item) => ({
     value: item.slug ?? DEFAULT_FILTER_VALUE,
-    label: item.label,
+    label: item.slug ? (sortLabelBySlug[item.slug] ?? item.label) : t("search.sortTimeDesc"),
   }));
   const queryFilterItemList = filterList.map((item) => ({
     value: item.slug ?? DEFAULT_FILTER_VALUE,
-    label: item.label,
+    label:
+      item.slug === "featured==true"
+        ? t("search.featured")
+        : item.slug
+          ? item.label
+          : t("search.noFilter"),
   }));
 
   return (
@@ -111,7 +123,7 @@ export function SearchFilterClient({
 
       <ResponsiveComboBox
         filterItemList={categoryFilterItemList}
-        placeholder="All Categories"
+        placeholder={t("search.allCategories")}
         labelPrefix="Category: "
         selectedValue={selectedCategory || DEFAULT_FILTER_VALUE}
         onValueChange={(value) => handleFilterChange("category", value)}
@@ -140,27 +152,27 @@ export function SearchFilterClient({
           )
         }
         value={selectedTag ? selectedTag.split(",") : []}
-        placeholder="Select tags"
+        placeholder={t("search.selectTags")}
         variant="default"
         maxCount={0}
       />
 
       <ResponsiveComboBox
         filterItemList={queryFilterItemList}
-        placeholder={DEFAULT_QUERY.label}
+        placeholder={t("search.noFilter")}
         selectedValue={selectedFilter || DEFAULT_FILTER_VALUE}
         onValueChange={(value) => handleFilterChange("f", value)}
       />
 
       <ResponsiveComboBox
         filterItemList={sortFilterItemList}
-        placeholder={DEFAULT_SORT.label}
+        placeholder={t("search.sortTimeDesc")}
         selectedValue={selectedSort || DEFAULT_FILTER_VALUE}
         onValueChange={(value) => handleFilterChange("sort", value)}
       />
 
       <Button variant="outline" onClick={handleResetFilters}>
-        Reset
+        {t("search.reset")}
       </Button>
     </div>
   );

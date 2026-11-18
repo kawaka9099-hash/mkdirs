@@ -2,6 +2,7 @@
 
 import { urlForImage } from "@/lib/image";
 import { cn, getItemTargetLinkInWebsite } from "@/lib/utils";
+import { useLanguage } from "@/i18n/language-provider";
 import type { ItemInfo } from "@/types";
 import { ArrowRightIcon, AwardIcon, HashIcon } from "lucide-react";
 import Image from "next/image";
@@ -16,6 +17,7 @@ type ItemCardProps = {
  * ItemCard shows item cover image
  */
 export default function ItemCard({ item }: ItemCardProps) {
+  const { t } = useLanguage();
   const imageProps = item?.image ? urlForImage(item.image) : null;
   const imageBlurDataURL = item?.image?.blurDataURL || null;
   // console.log(`ItemCard, imageBlurDataURL:${imageBlurDataURL}`);
@@ -78,7 +80,7 @@ export default function ItemCard({ item }: ItemCardProps) {
                 className="text-white text-lg font-semibold 
                       opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               >
-                Visit Website
+                {t("item.visitWebsite")}
               </span>
             </Link>
           ) : null}
@@ -106,17 +108,17 @@ export default function ItemCard({ item }: ItemCardProps) {
                 {item.featured && (
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-100 dark:text-amber-300 dark:bg-amber-950 px-2 py-0.5 rounded-full">
                     <AwardIcon className="w-3.5 h-3.5" />
-                    精选
+                    {t("item.featured")}
                   </span>
                 )}
                 {item.sponsor && (
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-teal-700 bg-teal-100 dark:text-teal-300 dark:bg-teal-950 px-2 py-0.5 rounded-full">
-                    赞助
+                    {t("item.sponsored")}
                   </span>
                 )}
               </div>
               <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shrink-0">
-                <span className="">Details</span>
+                <span className="">{t("item.details")}</span>
                 <ArrowRightIcon className={cn("size-4 icon-scale", "")} />
               </div>
             </div>

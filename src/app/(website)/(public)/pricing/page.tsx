@@ -3,6 +3,7 @@ import { PricingPlans } from "@/components/dashboard/pricing-plans";
 import { PricingFaq } from "@/components/pricing/pricing-faq";
 import { HeaderSection } from "@/components/shared/header-section";
 import { siteConfig } from "@/config/site";
+import { getServerT } from "@/i18n/server";
 import { constructMetadata } from "@/lib/metadata";
 
 export const metadata = constructMetadata({
@@ -12,15 +13,16 @@ export const metadata = constructMetadata({
 });
 
 export default async function PricingPage() {
+  const { dict } = await getServerT();
   return (
     <Container className="mt-8 pb-16">
       <div className="w-full flex flex-col gap-16">
         <section className="w-full flex flex-col gap-8 justify-center">
           <HeaderSection
             labelAs="h1"
-            label="Pricing"
+            label={dict.pricing.label}
             titleAs="h2"
-            title="Choose a pricing plan"
+            title={dict.pricing.title}
           />
 
           <div className="w-full mx-auto">
@@ -44,7 +46,7 @@ export default async function PricingPage() {
           <HeaderSection
             label="FAQ"
             titleAs="h2"
-            title="Frequently Asked Questions"
+            title={dict.pricing.faqTitle}
           />
 
           <div className="w-full max-w-4xl mx-auto">
