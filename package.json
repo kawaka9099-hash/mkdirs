@@ -86,6 +86,7 @@
     "@sanity/dashboard": "^4.0.0",
     "@sanity/icons": "^3.4.0",
     "@sanity/image-url": "^1.0.2",
+    "@sanity/locale-zh-hans": "^2.1.40",
     "@sanity/preview-url-secret": "^1.6.20",
     "@sanity/uuid": "^3.0.2",
     "@sanity/vision": "^3.57.2",

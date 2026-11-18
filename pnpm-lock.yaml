@@ -149,6 +149,9 @@ importers:
       '@sanity/image-url':
         specifier: ^1.0.2
         version: 1.1.0
+      '@sanity/locale-zh-hans':
+        specifier: ^2.1.40
+        version: 2.1.40(sanity@3.63.0(@types/node@22.9.0)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.36.0))
       '@sanity/preview-url-secret':
         specifier: ^1.6.20
         version: 1.6.21(@sanity/client@6.22.3)
@@ -3211,6 +3214,12 @@ packages:
       react-dom: ^18
       sanity: ^3.36.4
       styled-components: ^6.1
+
+  '@sanity/locale-zh-hans@2.1.40':
+    resolution: {integrity: sha512-d8YxAPvjxcHi/cqSDjPOiPReLpRY0KvJGeqfkwA/UO/zqrgnUWLo7OoDcQWsn4gGPbGd1pteTnhQbghSq5IIDg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      sanity: ^3.22.0 || ^4.0.0-0 || ^5.0.0-0 || ^6.0.0-0
 
   '@sanity/logos@2.1.13':
     resolution: {integrity: sha512-PKAbPbM4zn+6wHYjCVwuhmlZnFqyZ9lT/O7OT3BVd2SGAqXoZTimfBOHrVPifytuazdoQ1T2M5eYJTtW/VXLyA==}
@@ -10954,6 +10963,8 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       sanity: 3.63.0(@types/node@22.9.0)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.36.0)
       styled-components: 6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+
+  '@sanity/locale-zh-hans@2.1.40(sanity@3.63.0(@types/node@22.9.0)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.36.0))': {}
 
   '@sanity/logos@2.1.13(@sanity/color@3.0.6)(react@18.3.1)':
     dependencies:

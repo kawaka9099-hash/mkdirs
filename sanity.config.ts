@@ -6,6 +6,7 @@ import { schemaTypes } from '@/sanity/schemas';
 import settings from '@/sanity/schemas/documents/settings';
 import { structure } from '@/sanity/structure';
 import { codeInput } from '@sanity/code-input';
+import { zhHansLocale } from '@sanity/locale-zh-hans';
 import { 
   dashboardTool, 
   projectInfoWidget, 
@@ -32,6 +33,9 @@ export default defineConfig({
   },
 
   plugins: [
+    // Simplified Chinese UI for Sanity Studio (select in the user menu)
+    zhHansLocale(),
+
     // https://www.sanity.io/docs/structure-tool-api
     // The Structure Tool is a top-level view within Sanity Studio 
     // where editors can drill down to specific documents to edit them.
