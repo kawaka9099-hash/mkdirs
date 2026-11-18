@@ -17,10 +17,12 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { siteConfig } from "@/config/site";
+import { useCurrentRole } from "@/hooks/use-current-role";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useScroll } from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
 import type { DashboardConfig, MarketingConfig } from "@/types";
+import { UserRole } from "@/types/user-role";
 import { ArrowRightIcon, MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -60,7 +62,12 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
 
   const pathname = usePathname();
   // console.log(`Navbar, pathname: ${pathname}`);
-  const links = config.menus;
+  // The Studio entry opens the content backend: only ADMIN sees it.
+  // Everyone else (including logged-out visitors) never sees the link.
+  const role = useCurrentRole();
+  const links = config.menus.filter(
+    (item) => item.href !== "/studio" || role === UserRole.ADMIN,
+  );
   // console.log(`Navbar, links: ${links.map((link) => link.title)}`);
 
   const isLinkActive = (href: string) => {

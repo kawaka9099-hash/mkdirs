@@ -3,7 +3,9 @@ import { ModeToggle } from "@/components/layout/mode-toggle";
 import { footerConfig } from "@/config/footer";
 import { siteConfig } from "@/config/site";
 import { getServerT } from "@/i18n/server";
+import { currentRole } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { UserRole } from "@/types/user-role";
 import Link from "next/link";
 import type * as React from "react";
 import Container from "../container";
@@ -40,6 +42,8 @@ const LINK_LABEL_BY_TITLE: Record<string, string> = {
 
 export async function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
   const { t } = await getServerT();
+  // The Studio link opens the content backend: only ADMIN sees it.
+  const isAdmin = (await currentRole()) === UserRole.ADMIN;
 
   return (
     <footer className={cn("border-t", className)}>
@@ -118,7 +122,8 @@ export async function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
             <ul className="mt-4 list-inside space-y-3">
               {section.items?.map(
                 (link) =>
-                  link.href && (
+                  link.href &&
+                  (link.href !== "/studio" || isAdmin) && (
                     <li key={link.title}>
                       <Link
                         href={link.href}
