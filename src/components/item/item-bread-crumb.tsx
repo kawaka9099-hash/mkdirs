@@ -6,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { getServerT } from "@/i18n/server";
 import type { ItemInfo } from "@/types";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { ChevronsUpDownIcon, HomeIcon } from "lucide-react";
@@ -22,7 +23,8 @@ interface ItemBreadCrumbProps {
 /**
  * breadcrumb for item
  */
-export default function ItemBreadCrumb({ item }: ItemBreadCrumbProps) {
+export default async function ItemBreadCrumb({ item }: ItemBreadCrumbProps) {
+  const { t } = await getServerT();
   return (
     <Breadcrumb className="text-base">
       <BreadcrumbList>
@@ -30,14 +32,14 @@ export default function ItemBreadCrumb({ item }: ItemBreadCrumbProps) {
           <BreadcrumbLink href={"/"}>
             <div className="flex items-center gap-1">
               <HomeIcon className="w-4 h-4" />
-              <span>Home</span>
+              <span>{t("nav.home")}</span>
             </div>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <BreadcrumbLink href={"/category"}>
-            <span>Category</span>
+            <span>{t("misc.category")}</span>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />

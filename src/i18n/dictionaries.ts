@@ -51,6 +51,7 @@ export type Dictionary = {
     noItems: string;
   };
   search: {
+    title: string;
     placeholder: string;
     allCategories: string;
     selectTags: string;
@@ -122,6 +123,17 @@ export type Dictionary = {
   common: {
     back: string;
   };
+  newsletter: {
+    label: string;
+    title: string;
+    subtitle: string;
+    emailPlaceholder: string;
+    emailLabel: string;
+    subscribe: string;
+    thanks: string;
+    errorRetry: string;
+    errorGeneric: string;
+  };
   misc: {
     backHome: string;
     backLogin: string;
@@ -192,6 +204,7 @@ const zh: Dictionary = {
     noItems: "暂未收录",
   },
   search: {
+    title: "搜你想要的任何东西",
     placeholder: "搜索你需要的一人公司",
     allCategories: "全部分类",
     selectTags: "选择标签",
@@ -262,6 +275,17 @@ const zh: Dictionary = {
   },
   common: {
     back: "返回",
+  },
+  newsletter: {
+    label: "通讯",
+    title: "加入社区",
+    subtitle: "订阅我们的通讯，获取最新消息和更新",
+    emailPlaceholder: "输入你的邮箱",
+    emailLabel: "邮箱",
+    subscribe: "订阅",
+    thanks: "感谢订阅我们的通讯",
+    errorRetry: "出了点问题，请再试一次",
+    errorGeneric: "出了点问题",
   },
   misc: {
     backHome: "回到首页",
@@ -334,6 +358,7 @@ const en: Dictionary = {
     noItems: "No listings yet",
   },
   search: {
+    title: "Search anything you want",
     placeholder: "Search one-person companies",
     allCategories: "All categories",
     selectTags: "Select tags",
@@ -404,6 +429,17 @@ const en: Dictionary = {
   },
   common: {
     back: "Back",
+  },
+  newsletter: {
+    label: "Newsletter",
+    title: "Join the Community",
+    subtitle: "Subscribe to our newsletter for the latest news and updates",
+    emailPlaceholder: "Enter your email",
+    emailLabel: "Email",
+    subscribe: "Subscribe",
+    thanks: "Thank you for subscribing to our newsletter",
+    errorRetry: "Something went wrong, please try again",
+    errorGeneric: "Something went wrong",
   },
   misc: {
     backHome: "Back to home",
@@ -476,6 +512,7 @@ const ja: Dictionary = {
     noItems: "まだ収録がありません",
   },
   search: {
+    title: "何でも検索",
     placeholder: "一人会社を検索",
     allCategories: "すべてのカテゴリー",
     selectTags: "タグを選択",
@@ -547,6 +584,17 @@ const ja: Dictionary = {
   common: {
     back: "戻る",
   },
+  newsletter: {
+    label: "ニュースレター",
+    title: "コミュニティに参加",
+    subtitle: "最新ニュースと更新情報を受け取るためにニュースレターに登録してください",
+    emailPlaceholder: "メールアドレスを入力",
+    emailLabel: "メール",
+    subscribe: "購読する",
+    thanks: "ニュースレターへのご登録ありがとうございます",
+    errorRetry: "問題が発生しました。もう一度お試しください",
+    errorGeneric: "問題が発生しました",
+  },
   misc: {
     backHome: "ホームに戻る",
     backLogin: "ログインに戻る",
@@ -617,6 +665,7 @@ const ko: Dictionary = {
     noItems: "아직 등록이 없습니다",
   },
   search: {
+    title: "원하는 것을 무엇이든 검색하세요",
     placeholder: "1인 기업 검색",
     allCategories: "모든 카테고리",
     selectTags: "태그 선택",
@@ -687,6 +736,17 @@ const ko: Dictionary = {
   },
   common: {
     back: "뒤로",
+  },
+  newsletter: {
+    label: "뉴스레터",
+    title: "커뮤니티에 참여하기",
+    subtitle: "최신 소식과 업데이트를 받으려면 뉴스레터를 구독하세요",
+    emailPlaceholder: "이메일을 입력하세요",
+    emailLabel: "이메일",
+    subscribe: "구독하기",
+    thanks: "뉴스레터 구독해 주셔서 감사합니다",
+    errorRetry: "문제가 발생했습니다. 다시 시도해 주세요",
+    errorGeneric: "문제가 발생했습니다",
   },
   misc: {
     backHome: "홈으로 돌아가기",
@@ -759,6 +819,7 @@ const fr: Dictionary = {
     noItems: "Aucune référence pour le moment",
   },
   search: {
+    title: "Recherchez ce que vous voulez",
     placeholder: "Rechercher une entreprise individuelle",
     allCategories: "Toutes les catégories",
     selectTags: "Choisir des tags",
@@ -829,6 +890,17 @@ const fr: Dictionary = {
   },
   common: {
     back: "Retour",
+  },
+  newsletter: {
+    label: "Newsletter",
+    title: "Rejoignez la communauté",
+    subtitle: "Abonnez-vous à notre newsletter pour recevoir les dernières nouvelles et mises à jour",
+    emailPlaceholder: "Saisissez votre e-mail",
+    emailLabel: "E-mail",
+    subscribe: "S'abonner",
+    thanks: "Merci de vous être abonné à notre newsletter",
+    errorRetry: "Une erreur est survenue, veuillez réessayer",
+    errorGeneric: "Une erreur est survenue",
   },
   misc: {
     backHome: "Retour à l'accueil",
@@ -901,6 +973,7 @@ const es: Dictionary = {
     noItems: "Aún no hay registros",
   },
   search: {
+    title: "Busca lo que quieras",
     placeholder: "Buscar empresas unipersonales",
     allCategories: "Todas las categorías",
     selectTags: "Elegir etiquetas",
@@ -971,6 +1044,17 @@ const es: Dictionary = {
   },
   common: {
     back: "Volver",
+  },
+  newsletter: {
+    label: "Boletín",
+    title: "Únete a la comunidad",
+    subtitle: "Suscríbete a nuestro boletín para recibir las últimas noticias y novedades",
+    emailPlaceholder: "Introduce tu correo electrónico",
+    emailLabel: "Correo electrónico",
+    subscribe: "Suscribirse",
+    thanks: "Gracias por suscribirte a nuestro boletín",
+    errorRetry: "Algo salió mal, inténtalo de nuevo",
+    errorGeneric: "Algo salió mal",
   },
   misc: {
     backHome: "Volver al inicio",
@@ -1043,6 +1127,7 @@ const pt: Dictionary = {
     noItems: "Nenhum cadastro ainda",
   },
   search: {
+    title: "Pesquise o que quiser",
     placeholder: "Buscar empresas de uma pessoa só",
     allCategories: "Todas as categorias",
     selectTags: "Escolher tags",
@@ -1113,6 +1198,17 @@ const pt: Dictionary = {
   },
   common: {
     back: "Voltar",
+  },
+  newsletter: {
+    label: "Newsletter",
+    title: "Junte-se à comunidade",
+    subtitle: "Assine nossa newsletter para receber as últimas notícias e atualizações",
+    emailPlaceholder: "Digite seu e-mail",
+    emailLabel: "E-mail",
+    subscribe: "Assinar",
+    thanks: "Obrigado por assinar nossa newsletter",
+    errorRetry: "Algo deu errado, tente novamente",
+    errorGeneric: "Algo deu errado",
   },
   misc: {
     backHome: "Voltar ao início",
@@ -1185,6 +1281,7 @@ const de: Dictionary = {
     noItems: "Noch keine Einträge",
   },
   search: {
+    title: "Suchen Sie, was Sie möchten",
     placeholder: "Ein-Personen-Unternehmen suchen",
     allCategories: "Alle Kategorien",
     selectTags: "Tags auswählen",
@@ -1255,6 +1352,17 @@ const de: Dictionary = {
   },
   common: {
     back: "Zurück",
+  },
+  newsletter: {
+    label: "Newsletter",
+    title: "Treten Sie der Community bei",
+    subtitle: "Abonnieren Sie unseren Newsletter für die neuesten Nachrichten und Updates",
+    emailPlaceholder: "Geben Sie Ihre E-Mail-Adresse ein",
+    emailLabel: "E-Mail",
+    subscribe: "Abonnieren",
+    thanks: "Vielen Dank für Ihr Newsletter-Abonnement",
+    errorRetry: "Etwas ist schiefgelaufen, bitte versuchen Sie es erneut",
+    errorGeneric: "Etwas ist schiefgelaufen",
   },
   misc: {
     backHome: "Zurück zur Startseite",

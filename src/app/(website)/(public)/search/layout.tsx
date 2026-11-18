@@ -1,19 +1,21 @@
 import Container from "@/components/container";
 import { SearchFilter } from "@/components/search/search-filter";
+import { getServerT } from "@/i18n/server";
 import { HeaderSection } from "@/components/shared/header-section";
 
-export default function SearchLayout({
+export default async function SearchLayout({
   children,
 }: { children: React.ReactNode }) {
+  const { t } = await getServerT();
   return (
     <div className="mb-16">
       <div className="mt-8">
         <div className="w-full flex flex-col items-center justify-center gap-8">
           <HeaderSection
             labelAs="h1"
-            label="Search"
+            label={t("nav.search")}
             titleAs="h2"
-            title="Search anything you want"
+            title={t("search.title")}
           />
 
           <div className="w-full">

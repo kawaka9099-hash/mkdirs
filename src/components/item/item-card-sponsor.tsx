@@ -2,6 +2,7 @@
 
 import { urlForIcon } from "@/lib/image";
 import { cn, getItemTargetLinkInWebsite } from "@/lib/utils";
+import { useLanguage } from "@/i18n/language-provider";
 import type { ItemInfo } from "@/types";
 import { ArrowUpRightIcon } from "lucide-react";
 import Image from "next/image";
@@ -16,6 +17,7 @@ type SponsorItemCardProps = {
  * SponsorItemCard shows item icon
  */
 export default function SponsorItemCard({ item }: SponsorItemCardProps) {
+  const { t } = useLanguage();
   const iconProps = item?.icon ? urlForIcon(item.icon) : null;
   const iconBlurDataURL = item?.icon?.blurDataURL || null;
   // console.log(`SponsorItemCard, iconBlurDataURL:${iconBlurDataURL}`);
@@ -86,7 +88,7 @@ export default function SponsorItemCard({ item }: SponsorItemCardProps) {
           )}
         >
           <div className="flex items-center justify-center gap-2">
-            <span className="text-white font-semibold">Visit Website</span>
+            <span className="text-white font-semibold">{t("item.visitWebsite")}</span>
             <ArrowUpRightIcon className="text-white font-semibold size-4 transition-transform group-hover:translate-x-1" />
           </div>
         </Button>
