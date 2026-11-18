@@ -200,7 +200,12 @@ export const structure = (
       '_type == "item" && publishDate == null',
     );
 
+    // All Items keeps its document list, but needs a unique id:
+    // createBulkActionsTable() below always uses id = the type name ("item"),
+    // and two list items with the same id crash the whole Item management list
+    // ("List items with same ID found (item)").
     const allItems = S.documentTypeListItem(item.name)
+      .id("all-items")
       .title("All Items")
       .icon(DashboardIcon);
 
