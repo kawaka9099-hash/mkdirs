@@ -84,7 +84,6 @@ export default function ItemCard({ item }: ItemCardProps) {
           ) : null}
         </div>
 
-
         {/* center */}
         <Link
           href={`${itemUrlPrefix}/${item.slug.current}`}
@@ -95,16 +94,27 @@ export default function ItemCard({ item }: ItemCardProps) {
               <h3
                 className={cn(
                   "min-w-0 flex-1 text-xl font-medium truncate overflow-hidden text-ellipsis",
-                  item.featured && "text-gradient_indigo-purple font-semibold",
+                  item.featured && "text-gradient_teal-emerald font-semibold",
                 )}
               >
                 <span className="flex items-center gap-2">
-                  {item.featured && (
-                    <AwardIcon className="w-5 h-5 flex-shrink-0 text-indigo-500" />
-                  )}
                   <span className="truncate">{item.name}</span>
                 </span>
               </h3>
+              {/* 徽章：精选 / 赞助（数据来源：item.featured、item.sponsor） */}
+              <div className="flex items-center gap-1.5 shrink-0">
+                {item.featured && (
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-100 dark:text-amber-300 dark:bg-amber-950 px-2 py-0.5 rounded-full">
+                    <AwardIcon className="w-3.5 h-3.5" />
+                    精选
+                  </span>
+                )}
+                {item.sponsor && (
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-teal-700 bg-teal-100 dark:text-teal-300 dark:bg-teal-950 px-2 py-0.5 rounded-full">
+                    赞助
+                  </span>
+                )}
+              </div>
               <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shrink-0">
                 <span className="">Details</span>
                 <ArrowRightIcon className={cn("size-4 icon-scale", "")} />

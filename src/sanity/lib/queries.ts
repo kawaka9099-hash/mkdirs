@@ -1,3 +1,4 @@
+import type { Category } from "@/sanity.types";
 import groq, { defineQuery } from "groq";
 
 /**
@@ -179,6 +180,53 @@ export const tagListQuery = defineQuery(`*[_type == "tag" && defined(slug.curren
 
 export const tagQuery = defineQuery(`*[_type == "tag" && slug.current == $slug][0] {
   ${tagFields}
+}`);
+
+/**
+ * 首页统计（CN OPC）：收录总数、分类数、最新收录时间
+ * 数字全部从站内数据算出，不写死
+ */
+export type HomeStatsQueryResult = {
+  totalItems: number;
+  totalCategories: number;
+  latestPublishDate: string | null;
+};
+
+export const homeStatsQuery = defineQuery(`{
+  "totalItems": count(*[_type == "item" && defined(slug.current)
+    && defined(publishDate)
+    && forceHidden != true
+    && sponsor != true]),
+  "totalCategories": count(*[_type == "category" && defined(slug.current)]),
+  "latestPublishDate": *[_type == "item" && defined(publishDate)
+    && forceHidden != true] | order(publishDate desc)[0].publishDate
+}`);
+
+/**
+ * 分类列表（含每个分类下的收录数）
+ */
+export type CategoryWithCount = Category & { count: number };
+
+export const categoryListWithCountQuery = defineQuery(`*[_type == "category" && defined(slug.current)]
+  | order(priority desc) {
+    ...,
+    "count": count(*[_type == "item" && references(^._id)
+      && defined(publishDate)
+      && forceHidden != true
+      && sponsor != true])
+}`);
+
+/**
+ * 编辑精选：取 slug 为 editors-picks 的合集下的条目
+ * 若该合集不存在或为空，首页用 featured 条目兜底（见 home-content.tsx）
+ */
+export const itemListByCollectionIdQuery = defineQuery(`*[_type == "item" && references($collectionId)
+  && defined(slug.current)
+  && defined(publishDate)
+  && forceHidden != true
+  && sponsor != true]
+  | order(publishDate desc) [0...$count] {
+    ${itemSimpleFields}
 }`);
 
 // ======================================================================================================================
