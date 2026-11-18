@@ -21,7 +21,10 @@ export default {
   // trustHost: true,
   providers: [
     // https://authjs.dev/getting-started/authentication/oauth
-    GitHub,
+    // GitHub now returns `iss=https://github.com` in the authorization
+    // response; without an explicit issuer Auth.js rejects the callback
+    // with "unexpected iss response parameter value" (CallbackRouteError).
+    GitHub({ issuer: "https://github.com" }),
     Google,
     // https://authjs.dev/getting-started/authentication/credentials
     // https://youtu.be/1MTyCvS05V4?t=11279
