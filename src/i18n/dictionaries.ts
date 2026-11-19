@@ -426,8 +426,8 @@ const zh: Dictionary = {
   },
   hero: {
     titleFirst: "发现国内",
-    titleSecond: "优质一人公司",
-    subtitle: "CN OPC 收录国内优质一人公司、独立开发者与自由职业者",
+    titleSecond: "优质OPC公司",
+    subtitle: "CN OPC 收录国内优质OPC、独立开发者与自由职业者",
     cta: "收录你的公司",
     items: "收录",
     categories: "分类",
