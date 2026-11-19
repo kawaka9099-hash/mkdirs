@@ -3,6 +3,7 @@ import SubmissionCardInPlanPage from "@/components/payment/submission-card-in-pl
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { siteConfig } from "@/config/site";
+import { getServerT } from "@/i18n/server";
 import { currentUser } from "@/lib/auth";
 import { constructMetadata } from "@/lib/metadata";
 import { sanityFetch } from "@/sanity/lib/fetch";
@@ -16,9 +17,10 @@ export async function generateMetadata({
 }: {
   params: { id: string };
 }): Promise<Metadata | undefined> {
+  const { t } = await getServerT();
   return constructMetadata({
-    title: "Submit your product (2/3)",
-    description: "Submit your product (2/3) Choose pricing plan",
+    title: t("submit.meta2Title"),
+    description: t("submit.meta2Desc"),
     canonicalUrl: `${siteConfig.url}/payment/${params.id}`,
   });
 }

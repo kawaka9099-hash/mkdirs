@@ -3,15 +3,19 @@ import SubmissionList from "@/components/dashboard/submission-list";
 import CustomPagination from "@/components/shared/pagination";
 import { siteConfig } from "@/config/site";
 import { getSubmissions } from "@/data/submission";
+import { getServerT } from "@/i18n/server";
 import { currentUser } from "@/lib/auth";
 import { SUBMISSIONS_PER_PAGE } from "@/lib/constants";
 import { constructMetadata } from "@/lib/metadata";
 
-export const metadata = constructMetadata({
-  title: "Dashboard",
-  description: "Overview of submissions",
-  canonicalUrl: `${siteConfig.url}/dashboard`,
-});
+export async function generateMetadata() {
+  const { t } = await getServerT();
+  return constructMetadata({
+    title: t("dashboard.title"),
+    description: t("dashboard.subtitle"),
+    canonicalUrl: `${siteConfig.url}/dashboard`,
+  });
+}
 
 export default async function DashboardPage({
   searchParams,

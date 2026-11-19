@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { type UserNameData, UserNameSchema } from "@/lib/schemas";
+import { useLanguage } from "@/i18n/language-provider";
+import { type UserNameData, createUserNameSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { useState, useTransition } from "react";
@@ -15,6 +16,7 @@ import { toast } from "sonner";
 import { Icons } from "../icons/icons";
 
 export function UserNameForm() {
+  const { t } = useLanguage();
   const user = useCurrentUser();
   // console.log('UserNameForm, user:', user);
   const { update } = useSession();
@@ -26,7 +28,7 @@ export function UserNameForm() {
   };
 
   const form = useForm<UserNameData>({
-    resolver: zodResolver(UserNameSchema),
+    resolver: zodResolver(createUserNameSchema(t)),
     defaultValues: {
       name: user?.name || "",
     },
@@ -49,7 +51,7 @@ export function UserNameForm() {
           }
         })
         .catch(() => {
-          toast.error("Something went wrong");
+          toast.error(t("toast.somethingWrong"));
         });
     });
   });
@@ -57,19 +59,19 @@ export function UserNameForm() {
   return (
     <form onSubmit={onSubmit}>
       <SectionColumns
-        title="Your Name"
-        description="Please enter your display name"
+        title={t("settings.yourName")}
+        description={t("settings.yourNameDesc")}
       >
         <div className="flex w-full items-center gap-2">
           <Label className="sr-only" htmlFor="name">
-            Name
+            {t("settings.nameLabel")}
           </Label>
           <Input
             id="name"
             className="flex-1"
             size={32}
             {...form.register("name")}
-            placeholder="Enter your name, max 32 characters"
+            placeholder={t("settings.namePlaceholder")}
             onChange={(e) => checkUpdate(e.target.value)}
           />
           <Button
@@ -80,12 +82,12 @@ export function UserNameForm() {
             {isPending ? (
               <div className="flex items-center gap-2">
                 <Icons.spinner className="size-4 animate-spin" />
-                <p>Saving...</p>
+                <p>{t("settings.saving")}</p>
               </div>
             ) : (
               <p>
-                Save
-                <span className="hidden sm:inline-flex">&nbsp;Changes</span>
+                {t("settings.save")}
+                <span className="hidden sm:inline-flex">&nbsp;{t("settings.saveChanges")}</span>
               </p>
             )}
           </Button>
@@ -97,7 +99,7 @@ export function UserNameForm() {
             </p>
           )}
 
-          <p className="text-[13px] text-muted-foreground">Max 32 characters</p>
+          <p className="text-[13px] text-muted-foreground">{t("settings.max32")}</p>
         </div>
       </SectionColumns>
     </form>

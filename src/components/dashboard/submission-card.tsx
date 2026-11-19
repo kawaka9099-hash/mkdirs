@@ -5,6 +5,7 @@ import { UnpublishButton } from "@/components/dashboard/unpublish-button";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useLanguage } from "@/i18n/language-provider";
 import { getPublishable } from "@/lib/submission";
 import { getLocaleDate } from "@/lib/utils";
 import type { ItemInfo } from "@/types";
@@ -18,8 +19,15 @@ type SubmissionCardProps = {
 };
 
 export default function SubmissionCard({ item }: SubmissionCardProps) {
+  const { t } = useLanguage();
   // console.log('SubmissionCard, item:', item);
   const publishable = getPublishable(item);
+  const planLabel =
+    item.pricePlan === "sponsor"
+      ? t("dashboard.planSponsor")
+      : item.pricePlan === "pro"
+        ? t("dashboard.planPro")
+        : t("dashboard.planFree");
 
   return (
     <Card className="flex-grow flex items-center p-4">
@@ -47,28 +55,28 @@ export default function SubmissionCard({ item }: SubmissionCardProps) {
 
             <div className="grid grid-cols-2 gap-4 text-sm pt-2">
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Plan:</span>
-                <span className="capitalize">{item.pricePlan}</span>
+                <span className="text-muted-foreground">{t("dashboard.plan")}</span>
+                <span className="capitalize">{planLabel}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Status:</span>
+                <span className="text-muted-foreground">{t("dashboard.status")}</span>
                 <SubmissionStatus item={item} />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm pt-2">
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Publish Date:</span>
+                <span className="text-muted-foreground">{t("dashboard.publishDate")}</span>
                 {item.publishDate ? (
                   <span className="font-medium">
                     {getLocaleDate(item.publishDate)}
                   </span>
                 ) : (
-                  <span className="font-semibold">Not published</span>
+                  <span className="font-semibold">{t("dashboard.notPublished")}</span>
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Created Date:</span>
+                <span className="text-muted-foreground">{t("dashboard.createdDate")}</span>
                 <span className="">{getLocaleDate(item._createdAt)}</span>
               </div>
             </div>
@@ -83,7 +91,7 @@ export default function SubmissionCard({ item }: SubmissionCardProps) {
             <Button asChild variant="outline" className="group overflow-hidden">
               <Link href={`/edit/${item._id}`}>
                 <EditIcon className="w-4 h-6 mr-2 icon-scale" />
-                Edit
+                {t("dashboard.editTitle")}
               </Link>
             </Button>
 

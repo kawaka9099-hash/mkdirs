@@ -1,6 +1,7 @@
 "use client";
 
-import { DEFAULT_SORT, type SortFilterItem } from "@/lib/constants";
+import { useLanguage } from "@/i18n/language-provider";
+import { type SortFilterItem } from "@/lib/constants";
 import { createUrl } from "@/lib/utils";
 import { ListChecksIcon } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -13,10 +14,21 @@ export type SortListMobileProps = {
 };
 
 export function SortListMobile({ sortList }: SortListMobileProps) {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [active, setActive] = useState("");
+  // Sort labels are translated by slug, not by the English label
+  // in constants.ts, so the dropdown follows the chosen language.
+  const sortLabelBySlug: Record<string, string> = {
+    "date-asc": t("search.sortTimeAsc"),
+    "name-desc": t("search.sortNameDesc"),
+    "name-asc": t("search.sortNameAsc"),
+  };
+  const sortLabel = (item: SortFilterItem) =>
+    item.slug ? (sortLabelBySlug[item.slug] ?? item.label) : t("search.sortTimeDesc");
+  const activeItem = sortList.find((item) => item.slug === active);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -52,11 +64,10 @@ export function SortListMobile({ sortList }: SortListMobileProps) {
           <div className="flex items-center justify-between w-full gap-4">
             <div className="flex items-center gap-2">
               <ListChecksIcon className="size-5" />
-              <span className="text-sm">Sort</span>
+              <span className="text-sm">{t("blog.sort")}</span>
             </div>
             <span className="text-sm">
-              {sortList.find((item) => item.slug === active)?.label ||
-                DEFAULT_SORT.label}
+              {activeItem ? sortLabel(activeItem) : t("search.sortTimeDesc")}
             </span>
           </div>
         </Drawer.Trigger>
@@ -66,7 +77,7 @@ export function SortListMobile({ sortList }: SortListMobileProps) {
         />
         <Drawer.Portal>
           <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 mt-24 overflow-hidden rounded-t-[10px] border bg-background">
-            <Drawer.Title className="sr-only">Sort</Drawer.Title>
+            <Drawer.Title className="sr-only">{t("blog.sort")}</Drawer.Title>
             <div className="sticky top-0 z-20 flex w-full items-center justify-center bg-inherit">
               <div className="my-3 h-1.5 w-16 rounded-full bg-muted-foreground/20" />
             </div>
@@ -75,7 +86,7 @@ export function SortListMobile({ sortList }: SortListMobileProps) {
               {sortList.map((item) => (
                 <FilterItemMobile
                   key={item.slug}
-                  title={item.label}
+                  title={sortLabel(item)}
                   href={generateUrl(item.slug)}
                   active={active === item.slug}
                   clickAction={closeDrawer}

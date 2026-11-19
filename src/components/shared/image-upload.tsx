@@ -1,6 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/i18n/language-provider";
 import { cn } from "@/lib/utils";
 import { ImageUpIcon, Loader2Icon } from "lucide-react";
 import Image from "next/image";
@@ -23,6 +24,7 @@ export default function ImageUpload({
   onUploadChange,
   type = "image",
 }: ImageUploadProps) {
+  const { t } = useLanguage();
   const [uploading, setUploading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string | null>(currentImageUrl);
 
@@ -37,7 +39,7 @@ export default function ImageUpload({
     const maxSizeInBytes = 1 * 1024 * 1024; // 1MB
     if (file.size > maxSizeInBytes) {
       console.error("uploadImage, image size should be less than 1MB.");
-      toast.error("Image size should be less than 1MB.");
+      toast.error(t("toast.imageTooBig"));
       return null;
     }
 
@@ -52,7 +54,7 @@ export default function ImageUpload({
 
       if (!response.ok) {
         console.error("uploadImage, error uploading image:", response);
-        toast.error("Upload Image failed, please try again.");
+        toast.error(t("toast.uploadFailed"));
         return null;
       }
 
@@ -60,7 +62,7 @@ export default function ImageUpload({
       return asset;
     } catch (error) {
       console.error("uploadImage, error uploading image:", error);
-      toast.error("Upload Image failed, please try again.");
+      toast.error(t("toast.uploadFailed"));
       return null;
     }
   };
@@ -99,7 +101,7 @@ export default function ImageUpload({
         handleImageUploadRef.current(file);
         // handleImageUpload(file);
       } else {
-        toast.error("Only PNG and JPEG images are allowed.");
+        toast.error(t("toast.onlyPngJpeg"));
       }
     }
   }, []);
@@ -127,7 +129,7 @@ export default function ImageUpload({
           <div className="flex flex-col items-center justify-center gap-4">
             <ImageUpIcon className="h-8 w-8 text-muted-foreground" />
             <p className="text-sm text-muted-foreground">
-              Drag & drop or select image to upload
+              {t("submit.dropHint")}
             </p>
           </div>
         )}
@@ -137,7 +139,7 @@ export default function ImageUpload({
           <div className="flex flex-col items-center justify-center gap-4">
             <Loader2Icon className="h-8 w-8 text-muted-foreground animate-spin mx-auto" />
             <p className="text-sm text-muted-foreground">
-              Image is uploading...
+              {t("submit.uploading")}
             </p>
           </div>
         )}
@@ -162,7 +164,7 @@ export default function ImageUpload({
               />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <p className="text-sm font-medium text-white bg-black bg-opacity-50 px-3 py-2 rounded-md">
-                  Click to upload another image
+                  {t("submit.uploadAnother")}
                 </p>
               </div>
             </div>

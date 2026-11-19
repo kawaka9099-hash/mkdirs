@@ -1,14 +1,16 @@
 import { DashboardSubmitHeader } from "@/components/dashboard/dashboard-submit-header";
 import { SubmitStepper } from "@/components/submit/submit-stepper";
+import { getServerT } from "@/i18n/server";
 
 export default async function PublishLayout({
   children,
 }: { children: React.ReactNode }) {
+  const { t } = await getServerT();
   return (
     <div>
       <DashboardSubmitHeader
-        title="Submit"
-        subtitle="Review and publish product"
+        title={t("nav.submit")}
+        subtitle={t("submit.step3Subtitle")}
         label="3 / 3"
       >
         <SubmitStepper initialStep={3} />

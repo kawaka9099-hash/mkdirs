@@ -1,10 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/i18n/language-provider";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function AllPostsButton() {
+  const { t } = useLanguage();
   return (
     <Button
       size="lg"
@@ -17,7 +19,7 @@ export default function AllPostsButton() {
           className="w-5 h-5 
                     transition-transform duration-200 group-hover:-translate-x-1"
         />
-        <span>All Posts</span>
+        <span>{t("blog.allPosts")}</span>
       </Link>
     </Button>
   );

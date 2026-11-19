@@ -1,6 +1,7 @@
 "use server";
 
 import { NewsletterWelcomeEmail } from "@/emails/newsletter-welcome";
+import { getServerT } from "@/i18n/server";
 import { resend } from "@/lib/mail";
 import { type NewsletterFormData, NewsletterFormSchema } from "@/lib/schemas";
 
@@ -12,10 +13,11 @@ export type ServerActionResponse = {
 export async function subscribeToNewsletter(
   formdata: NewsletterFormData,
 ): Promise<ServerActionResponse> {
+  const { t } = await getServerT();
   try {
     const validatedInput = NewsletterFormSchema.safeParse(formdata);
     if (!validatedInput.success) {
-      return { status: "error", message: "Invalid input" };
+      return { status: "error", message: t("toast.invalidInput") };
     }
 
     const subscribedResult = await resend.contacts.create({
@@ -36,19 +38,19 @@ export async function subscribeToNewsletter(
       console.log("subscribeToNewsletter, emailSentResult", emailSentResult);
       const emailSent = !emailSentResult.error;
       if (emailSent) {
-        return { status: "success", message: "Subscribed to the newsletter" };
+        return { status: "success", message: t("toast.subscribedOk") };
       }
     }
 
     return {
       status: "error",
-      message: "Failed to subscribe to the newsletter",
+      message: t("toast.subscribeFailed"),
     };
   } catch (error) {
     console.error("subscribeToNewsletter, error:", error);
     return {
       status: "error",
-      message: "Failed to subscribe to the newsletter",
+      message: t("toast.subscribeFailed"),
     };
   }
 }

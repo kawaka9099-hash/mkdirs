@@ -20,9 +20,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { SUPPORT_ITEM_ICON } from "@/lib/constants";
 import { urlForImage } from "@/lib/image";
-import { EditSchema } from "@/lib/schemas";
+import { createEditSchema } from "@/lib/schemas";
 import { PricePlans } from "@/lib/submission";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/i18n/language-provider";
 import type {
   CategoryListQueryResult,
   TagListQueryResult,
@@ -49,13 +50,14 @@ interface EditFormProps {
  * https://react-hook-form.com/get-started
  */
 export function EditForm({ item, tagList, categoryList }: EditFormProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isUploading, setIsUploading] = useState(false);
 
   // set default values for form fields and validation schema
   const form = useForm<EditFormData>({
-    resolver: zodResolver(EditSchema),
+    resolver: zodResolver(createEditSchema(t)),
     defaultValues: {
       id: item._id,
       name: item.name,
@@ -95,7 +97,7 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
         })
         .catch((error) => {
           console.error("EditForm, error:", error);
-          toast.error("Something went wrong");
+          toast.error(t("toast.somethingWrong"));
         });
     });
   });
@@ -131,10 +133,10 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
                 name="link"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Link</FormLabel>
+                    <FormLabel>{t("submit.link")}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter the link to your product"
+                        placeholder={t("submit.linkPlaceholder")}
                         {...field}
                       />
                     </FormControl>
@@ -147,10 +149,10 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
                 name="name"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>{t("submit.name")}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter the name of your product"
+                        placeholder={t("submit.namePlaceholder")}
                         {...field}
                       />
                     </FormControl>
@@ -166,7 +168,7 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
                 name="categories"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Categories</FormLabel>
+                    <FormLabel>{t("submit.categories")}</FormLabel>
                     <FormControl>
                       <MultiSelect
                         className="shadow-none"
@@ -176,7 +178,7 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
                         }))}
                         onValueChange={(selected) => field.onChange(selected)}
                         value={field.value}
-                        placeholder="Select categories"
+                        placeholder={t("submit.categoriesPlaceholder")}
                         variant="default"
                         maxCount={3}
                       />
@@ -190,7 +192,7 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
                 name="tags"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Tags</FormLabel>
+                    <FormLabel>{t("submit.tags")}</FormLabel>
                     <FormControl>
                       <MultiSelect
                         className="shadow-none"
@@ -200,7 +202,7 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
                         }))}
                         onValueChange={(selected) => field.onChange(selected)}
                         value={field.value}
-                        placeholder="Select tags"
+                        placeholder={t("submit.tagsPlaceholder")}
                         variant="default"
                         maxCount={3}
                       />
@@ -216,10 +218,10 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>{t("submit.description")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter a brief description of your product"
+                      placeholder={t("submit.descriptionPlaceholder")}
                       {...field}
                       className="resize-none"
                     />
@@ -236,9 +238,9 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
                 <FormItem>
                   <FormLabel>
                     <div className="flex items-center justify-between gap-4">
-                      <span>Introduction</span>
+                      <span>{t("submit.introduction")}</span>
                       <span className="text-sm text-muted-foreground">
-                        (Markdown supported)
+                        {t("submit.markdownSupported")}
                       </span>
                     </div>
                   </FormLabel>
@@ -259,9 +261,9 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
                     <FormItem className="flex-1">
                       <FormLabel>
                         <div className="flex items-center justify-between gap-4">
-                          <span>Icon</span>
+                          <span>{t("submit.icon")}</span>
                           <span className="text-sm text-muted-foreground">
-                            (1:1, PNG or JPEG, max 1MB)
+                            {t("submit.iconHint")}
                           </span>
                         </div>
                       </FormLabel>
@@ -286,9 +288,9 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
                   <FormItem className="flex-1">
                     <FormLabel>
                       <div className="flex items-center justify-between gap-4">
-                        <span>Image</span>
+                        <span>{t("submit.image")}</span>
                         <span className="text-sm text-muted-foreground">
-                          (16:9,PNG or JPEG, max 1MB)
+                          {t("submit.imageHint")}
                         </span>
                       </div>
                     </FormLabel>
@@ -324,10 +326,10 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
               )}
               <span>
                 {isPending
-                  ? "Updating..."
+                  ? t("submit.updating")
                   : isUploading
-                    ? "Uploading image..."
-                    : "Update"}
+                    ? t("submit.uploadingImage")
+                    : t("submit.update")}
               </span>
             </Button>
 
@@ -336,8 +338,7 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
               <div className="text-muted-foreground flex items-center justify-center sm:justify-start gap-4">
                 <BellRingIcon className="h-5 w-5 sm:h-6 sm:w-4 flex-shrink-0" />
                 <span className="text-sm">
-                  Your submission will be reviewed again and remain unpublished
-                  until approved.
+                  {t("submit.reviewAgainFree")}
                 </span>
               </div>
             )}
@@ -347,8 +348,7 @@ export function EditForm({ item, tagList, categoryList }: EditFormProps) {
               <div className="text-muted-foreground flex items-center justify-center sm:justify-start gap-4">
                 <BellRingIcon className="h-5 w-5 sm:h-6 sm:w-4 flex-shrink-0" />
                 <span className="text-sm">
-                  Your changes will be visible on the site until the cache
-                  refreshes (usually takes 1 minute).
+                  {t("submit.cacheNotePro")}
                 </span>
               </div>
             )}

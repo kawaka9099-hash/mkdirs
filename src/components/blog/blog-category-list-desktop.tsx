@@ -1,6 +1,7 @@
 "use client";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useLanguage } from "@/i18n/language-provider";
 import { cn } from "@/lib/utils";
 import type { BlogCategoryListQueryResult } from "@/sanity.types";
 import Link from "next/link";
@@ -13,6 +14,7 @@ export type BlogCategoryListDesktopProps = {
 export function BlogCategoryListDesktop({
   categoryList,
 }: BlogCategoryListDesktopProps) {
+  const { t } = useLanguage();
   const { slug } = useParams() as { slug?: string };
 
   return (
@@ -23,7 +25,7 @@ export function BlogCategoryListDesktop({
           size="sm"
           type="single"
           value={slug || "All"}
-          aria-label="Toggle blog category"
+          aria-label={t("blog.toggleCategory")}
           className="h-9 overflow-hidden rounded-full border bg-background p-1 *:h-7 *:text-muted-foreground"
         >
           <ToggleGroupItem
@@ -34,10 +36,10 @@ export function BlogCategoryListDesktop({
               "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
               "hover:bg-muted hover:text-muted-foreground",
             )}
-            aria-label={"Toggle all blog categories"}
+            aria-label={t("blog.toggleAllCategories")}
           >
             <Link href={"/blog"}>
-              <h2>All</h2>
+              <h2>{t("blog.all")}</h2>
             </Link>
           </ToggleGroupItem>
 
@@ -50,7 +52,7 @@ export function BlogCategoryListDesktop({
                 "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
                 "hover:bg-muted hover:text-muted-foreground",
               )}
-              aria-label={`Toggle blog category of ${category.name}`}
+              aria-label={`${t("blog.toggleCategory")} - ${category.name}`}
             >
               <Link href={`/blog/category/${category.slug.current}`}>
                 <h2>{category.name}</h2>

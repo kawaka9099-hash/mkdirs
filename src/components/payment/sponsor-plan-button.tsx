@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { XiaodouPayButton } from "@/components/payment/xiaodou-pay-button";
+import { useLanguage } from "@/i18n/language-provider";
 import { SponsorPlanStatus } from "@/lib/submission";
 import { cn } from "@/lib/utils";
 import type { ItemInfo, PricePlan } from "@/types";
@@ -19,6 +20,7 @@ export function SponsorPlanButton({
   pricePlan,
   className,
 }: SponsorPlanButtonProps) {
+  const { t } = useLanguage();
   const router = useRouter();
 
   const buttonClassName = cn(
@@ -40,7 +42,7 @@ export function SponsorPlanButton({
         onClick={() => router.push("/submit")}
       >
         <div className="flex items-center justify-center gap-2">
-          <span>Go Submit</span>
+          <span>{t("dashboard.goSubmit")}</span>
           <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
         </div>
       </Button>
@@ -63,12 +65,12 @@ export function SponsorPlanButton({
         {item.publishDate ? (
           <div className="flex items-center justify-center">
             <ArrowUpLeftIcon className="mr-2 size-4 icon-scale" />
-            <span>Go Dashboard</span>
+            <span>{t("dashboard.goDashboard")}</span>
           </div>
         ) : (
           <div className="flex items-center justify-center">
             <CheckCircleIcon className="mr-2 size-4 icon-scale" />
-            <span>Go Publish</span>
+            <span>{t("dashboard.goPublish")}</span>
           </div>
         )}
       </Button>

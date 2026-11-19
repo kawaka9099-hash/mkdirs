@@ -4,14 +4,18 @@ import { UserPasswordForm } from "@/components/settings/user-password-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { siteConfig } from "@/config/site";
 import { currentUser } from "@/lib/auth";
+import { getServerT } from "@/i18n/server";
 import { constructMetadata } from "@/lib/metadata";
 import { redirect } from "next/navigation";
 
-export const metadata = constructMetadata({
-  title: "Settings",
-  description: "Manage account settings",
-  canonicalUrl: `${siteConfig.url}/settings`,
-});
+export async function generateMetadata() {
+  const { t } = await getServerT();
+  return constructMetadata({
+    title: t("dashboard.settingsTitle"),
+    description: t("dashboard.settingsSubtitle"),
+    canonicalUrl: `${siteConfig.url}/settings`,
+  });
+}
 
 export default async function SettingsPage() {
   const user = await currentUser();

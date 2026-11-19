@@ -1,6 +1,7 @@
 "use server";
 
 import { getUserByEmail } from "@/data/user";
+import { getServerT } from "@/i18n/server";
 import { sendPasswordResetEmail } from "@/lib/mail";
 import { ResetSchema } from "@/lib/schemas";
 import { generatePasswordResetToken } from "@/lib/tokens";
@@ -14,16 +15,17 @@ export type ServerActionResponse = {
 export async function reset(
   values: z.infer<typeof ResetSchema>,
 ): Promise<ServerActionResponse> {
+  const { t } = await getServerT();
   const validatedFields = ResetSchema.safeParse(values);
   if (!validatedFields.success) {
-    return { status: "error", message: "Invalid email!" };
+    return { status: "error", message: t("toast.invalidEmail") };
   }
 
   const { email } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
   if (!existingUser) {
-    return { status: "error", message: "Email not found!" };
+    return { status: "error", message: t("toast.emailNotFound") };
   }
 
   const passwordResetToken = await generatePasswordResetToken(email);
@@ -33,5 +35,5 @@ export async function reset(
     passwordResetToken.token,
   );
 
-  return { status: "success", message: "Password reset email sent" };
+  return { status: "success", message: t("toast.resetEmailSent") };
 }

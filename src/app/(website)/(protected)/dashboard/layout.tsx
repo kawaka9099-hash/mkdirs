@@ -1,15 +1,17 @@
 import { DashboardButton } from "@/components/dashboard/dashboard-button";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { Button } from "@/components/ui/button";
+import { getServerT } from "@/i18n/server";
 import { UploadIcon } from "lucide-react";
 import Link from "next/link";
 
 export default async function DashboardLayout({
   children,
 }: { children: React.ReactNode }) {
+  const { t } = await getServerT();
   return (
     <div>
-      <DashboardHeader title="Dashboard" subtitle="Overview of submissions">
+      <DashboardHeader title={t("dashboard.title")} subtitle={t("dashboard.subtitle")}>
         <div className="flex items-center space-x-4">
           <DashboardButton />
 
@@ -20,7 +22,7 @@ export default async function DashboardLayout({
               className="flex items-center justify-center space-x-2"
             >
               <UploadIcon className="w-4 h-4" />
-              <span>Submit</span>
+              <span>{t("nav.submit")}</span>
             </Link>
           </Button>
         </div>

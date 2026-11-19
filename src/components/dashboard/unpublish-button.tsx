@@ -3,6 +3,7 @@
 import { unpublish } from "@/actions/unpublish";
 import { Icons } from "@/components/icons/icons";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/i18n/language-provider";
 import type { ItemInfo } from "@/types";
 import { ArrowDownToLineIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,6 +16,7 @@ interface UnpublishButtonProps {
 }
 
 export function UnpublishButton({ item }: UnpublishButtonProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -25,16 +27,16 @@ export function UnpublishButton({ item }: UnpublishButtonProps) {
           if (data.status === "success") {
             console.log("unpublishAction, success:", data.message);
             router.refresh();
-            toast.success("Successfully unpublished");
+            toast.success(t("toast.unpublishedOk"));
           }
           if (data.status === "error") {
             console.error("unpublishAction, error:", data.message);
-            toast.error("Failed to unpublish");
+            toast.error(t("toast.failedUnpublish"));
           }
         })
         .catch((error) => {
           console.error("unpublishAction, error:", error);
-          toast.error("Failed to unpublish");
+          toast.error(t("toast.failedUnpublish"));
         });
     });
   };
@@ -49,12 +51,12 @@ export function UnpublishButton({ item }: UnpublishButtonProps) {
       {isPending ? (
         <div className="flex items-center justify-center">
           <Icons.spinner className="mr-2 w-4 h-4 animate-spin" />
-          <span>Unpublish</span>
+          <span>{t("dashboard.unpublish")}</span>
         </div>
       ) : (
         <div className="flex items-center justify-center">
           <ArrowDownToLineIcon className="mr-2 w-4 h-4 icon-scale" />
-          <span>Unpublish</span>
+          <span>{t("dashboard.unpublish")}</span>
         </div>
       )}
     </Button>

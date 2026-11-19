@@ -2,6 +2,7 @@
 
 import { getItemById } from "@/data/item";
 import { currentUser } from "@/lib/auth";
+import { getServerT } from "@/i18n/server";
 import { sendNotifySubmissionEmail } from "@/lib/mail";
 import { FreePlanStatus, PricePlans } from "@/lib/submission";
 import { getItemLinkInStudio, getItemStatusLinkInWebsite } from "@/lib/utils";
@@ -16,25 +17,26 @@ export const submitToReview = async (
   itemId: string,
 ): Promise<ServerActionResponse> => {
   console.log("submitToReview, itemId:", itemId);
+  const { t } = await getServerT();
   try {
     const user = await currentUser();
     if (!user) {
-      return { status: "error", message: "Unauthorized" };
+      return { status: "error", message: t("toast.unauthorized") };
     }
     // console.log("submitToReview, user:", user);
 
     const item = await getItemById(itemId);
     if (!item) {
-      return { status: "error", message: "Item not found!" };
+      return { status: "error", message: t("toast.itemNotFound") };
     }
     if (item.submitter._ref !== user.id) {
-      return { status: "error", message: "You are not allowed to do this!" };
+      return { status: "error", message: t("toast.notAllowed") };
     }
     if (
       item.pricePlan !== PricePlans.FREE ||
       item.freePlanStatus !== FreePlanStatus.SUBMITTING
     ) {
-      return { status: "error", message: "Item is not in right plan status!" };
+      return { status: "error", message: t("toast.wrongPlanStatus") };
     }
 
     const result = await sanityClient
@@ -46,7 +48,7 @@ export const submitToReview = async (
       .commit();
     // console.log('submitToReview, result:', result);
     if (!result) {
-      return { status: "error", message: "Failed to submit item to review!" };
+      return { status: "error", message: t("toast.reviewFailed") };
     }
 
     const statusLink = getItemStatusLinkInWebsite(itemId);
@@ -59,9 +61,9 @@ export const submitToReview = async (
       reviewLink,
     );
 
-    return { status: "success", message: "Item submitted to review!" };
+    return { status: "success", message: t("toast.reviewSuccess") };
   } catch (error) {
     console.log("submitToReview, error", error);
-    return { status: "error", message: "Failed to submit item to review!" };
+    return { status: "error", message: t("toast.reviewFailed") };
   }
 };

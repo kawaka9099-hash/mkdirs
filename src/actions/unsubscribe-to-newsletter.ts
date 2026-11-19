@@ -1,5 +1,6 @@
 "use server";
 
+import { getServerT } from "@/i18n/server";
 import { resend } from "@/lib/mail";
 import { type NewsletterFormData, NewsletterFormSchema } from "@/lib/schemas";
 
@@ -11,10 +12,11 @@ export type ServerActionResponse = {
 export async function unsubscribeToNewsletter(
   formdata: NewsletterFormData,
 ): Promise<ServerActionResponse> {
+  const { t } = await getServerT();
   try {
     const validatedInput = NewsletterFormSchema.safeParse(formdata);
     if (!validatedInput.success) {
-      return { status: "error", message: "Invalid input" };
+      return { status: "error", message: t("toast.invalidInput") };
     }
 
     const unsubscribedResult = await resend.contacts.remove({
@@ -29,19 +31,19 @@ export async function unsubscribeToNewsletter(
     if (unsubscribed) {
       return {
         status: "success",
-        message: "You have been unsubscribed from the newsletter",
+        message: t("toast.unsubscribedOk"),
       };
     }
 
     return {
       status: "error",
-      message: "Failed to unsubscribe to the newsletter",
+      message: t("toast.unsubscribeFailed"),
     };
   } catch (error) {
     console.error("unsubscribeToNewsletter, error", error);
     return {
       status: "error",
-      message: "Failed to unsubscribe to the newsletter",
+      message: t("toast.unsubscribeFailed"),
     };
   }
 }

@@ -8,6 +8,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
+import { useLanguage } from "@/i18n/language-provider";
 import type { BlogCategoryListQueryResult } from "@/sanity.types";
 import { LayoutListIcon } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -21,6 +22,7 @@ export type BlogCategoryListMobileProps = {
 export function BlogCategoryListMobile({
   categoryList,
 }: BlogCategoryListMobileProps) {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const { slug } = useParams() as { slug?: string };
   const selectedCategory = categoryList.find(
@@ -40,21 +42,21 @@ export function BlogCategoryListMobile({
         <div className="flex items-center justify-between w-full gap-4">
           <div className="flex items-center gap-2">
             <LayoutListIcon className="size-5" />
-            <span className="text-sm">Category</span>
+            <span className="text-sm">{t("blog.category")}</span>
           </div>
           <span className="text-sm">
-            {selectedCategory?.name ? `${selectedCategory?.name}` : "All"}
+            {selectedCategory?.name ? `${selectedCategory?.name}` : t("blog.all")}
           </span>
         </div>
       </DrawerTrigger>
       <DrawerPortal>
         <DrawerOverlay className="fixed inset-0 z-40 bg-background/50" />
         <DrawerContent className="fixed inset-x-0 bottom-0 z-50 mt-24 overflow-hidden rounded-t-[10px] border bg-background">
-          <DrawerTitle className="sr-only">Category</DrawerTitle>
+          <DrawerTitle className="sr-only">{t("blog.category")}</DrawerTitle>
 
           <ul className="mb-14 w-full p-3 text-muted-foreground">
             <FilterItemMobile
-              title="All"
+              title={t("blog.all")}
               href="/blog"
               active={!slug}
               clickAction={closeDrawer}

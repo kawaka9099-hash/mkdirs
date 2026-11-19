@@ -1,4 +1,7 @@
+"use client";
+
 import { Card } from "@/components/ui/card";
+import { useLanguage } from "@/i18n/language-provider";
 import {
   type BadgeStyle,
   BadgeStyles,
@@ -39,11 +42,21 @@ function StatusWrapper({
 }
 
 export default function SubmissionStatus({ item }: SubmissionStatusProps) {
+  const { t } = useLanguage();
   const badgeStyle = getBadgeStyle(item);
   const status =
     item.pricePlan === PricePlans.FREE
       ? item.freePlanStatus
       : item.proPlanStatus;
+  const statusLabelByValue: Record<string, string> = {
+    approved: t("dashboard.statusApproved"),
+    rejected: t("dashboard.statusRejected"),
+    pending: t("dashboard.statusPending"),
+    submitting: t("dashboard.statusSubmitting"),
+    success: t("dashboard.statusSuccess"),
+    failed: t("dashboard.statusFailed"),
+  };
+  const statusLabel = status ? statusLabelByValue[status] ?? status : "";
 
   return (
     <div>
@@ -52,7 +65,7 @@ export default function SubmissionStatus({ item }: SubmissionStatusProps) {
           <PopoverTrigger>
             <StatusWrapper badgeStyle={badgeStyle}>
               <div className="flex items-center gap-2">
-                <span className="capitalize">{status}</span>
+                <span className="capitalize">{statusLabel}</span>
                 <InfoIcon className="w-4 h-4" />
               </div>
             </StatusWrapper>
@@ -65,7 +78,7 @@ export default function SubmissionStatus({ item }: SubmissionStatusProps) {
         </Popover>
       ) : (
         <StatusWrapper badgeStyle={badgeStyle}>
-          <span className="capitalize">{status}</span>
+          <span className="capitalize">{statusLabel}</span>
         </StatusWrapper>
       )}
     </div>

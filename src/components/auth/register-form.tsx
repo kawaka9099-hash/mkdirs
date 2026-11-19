@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/i18n/language-provider";
-import { RegisterSchema } from "@/lib/schemas";
+import { RegisterSchema, createRegisterSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -29,7 +29,7 @@ export const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
-    resolver: zodResolver(RegisterSchema),
+    resolver: zodResolver(createRegisterSchema(t)),
     defaultValues: {
       email: "",
       password: "",

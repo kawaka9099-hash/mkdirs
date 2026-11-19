@@ -6,11 +6,14 @@ import { siteConfig } from "@/config/site";
 import { getServerT } from "@/i18n/server";
 import { constructMetadata } from "@/lib/metadata";
 
-export const metadata = constructMetadata({
-  title: "Pricing",
-  description: "Choose a pricing plan for submitting your product",
-  canonicalUrl: `${siteConfig.url}/pricing`,
-});
+export async function generateMetadata() {
+  const { t } = await getServerT();
+  return constructMetadata({
+    title: t("pricing.label"),
+    description: t("pricing.metaDesc"),
+    canonicalUrl: `${siteConfig.url}/pricing`,
+  });
+}
 
 export default async function PricingPage() {
   const { dict } = await getServerT();

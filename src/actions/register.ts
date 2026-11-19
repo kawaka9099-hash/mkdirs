@@ -1,6 +1,7 @@
 "use server";
 
 import { getUserByEmail } from "@/data/user";
+import { getServerT } from "@/i18n/server";
 import { sendVerificationEmail } from "@/lib/mail";
 import { RegisterSchema } from "@/lib/schemas";
 import { generateVerificationToken } from "@/lib/tokens";
@@ -18,10 +19,11 @@ export type ServerActionResponse = {
 export async function register(
   values: z.infer<typeof RegisterSchema>,
 ): Promise<ServerActionResponse> {
+  const { t } = await getServerT();
   const validatedFields = RegisterSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { status: "error", message: "Invalid Fields!" };
+    return { status: "error", message: t("toast.invalidFields") };
   }
 
   const { email, password, name } = validatedFields.data;
@@ -29,7 +31,7 @@ export async function register(
 
   const existingUser = await getUserByEmail(email);
   if (existingUser) {
-    return { status: "error", message: "Email already being used" };
+    return { status: "error", message: t("toast.emailInUse") };
   }
 
   await sanityClient.create({
@@ -48,6 +50,6 @@ export async function register(
   );
   return {
     status: "success",
-    message: "Please check your email for verification",
+    message: t("toast.checkEmailVerification"),
   };
 }

@@ -2,6 +2,7 @@
 
 import { getUserById } from "@/data/user";
 import { currentUser } from "@/lib/auth";
+import { getServerT } from "@/i18n/server";
 import type { UserPasswordData } from "@/lib/schemas";
 import { sanityClient } from "@/sanity/lib/client";
 import bcrypt from "bcryptjs";
@@ -15,15 +16,16 @@ export type ServerActionResponse = {
 export async function updateUserPassword(
   values: UserPasswordData,
 ): Promise<ServerActionResponse> {
+  const { t } = await getServerT();
   try {
     const user = await currentUser();
     if (!user) {
-      return { status: "error", message: "Unauthorized" };
+      return { status: "error", message: t("toast.unauthorized") };
     }
 
     const dbUser = await getUserById(user.id);
     if (!dbUser) {
-      return { status: "error", message: "User not found" };
+      return { status: "error", message: t("toast.userNotFound") };
     }
 
     // password change needs verification
@@ -34,7 +36,7 @@ export async function updateUserPassword(
       );
 
       if (!passwordsMatch) {
-        return { status: "error", message: "Incorrect password!" };
+        return { status: "error", message: t("toast.incorrectPassword") };
       }
 
       const hashedPassword = await bcrypt.hash(values.newPassword, 10);
@@ -47,14 +49,14 @@ export async function updateUserPassword(
       console.log("updateUserPassword, user:", updatedUser);
 
       revalidatePath("/settings");
-      return { status: "success", message: "User password updated!" };
+      return { status: "success", message: t("toast.passwordChanged") };
     }
-    return { status: "error", message: "No password provided" };
+    return { status: "error", message: t("toast.noPassword") };
   } catch (error) {
     console.log("updateUserPassword, error", error);
     return {
       status: "error",
-      message: "Failed to update user password!",
+      message: t("toast.passwordChangeFailed"),
     };
   }
 }

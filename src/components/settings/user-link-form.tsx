@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { type UserLinkData, UserLinkSchema } from "@/lib/schemas";
+import { useLanguage } from "@/i18n/language-provider";
+import { type UserLinkData, createUserLinkSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { useState, useTransition } from "react";
@@ -15,6 +16,7 @@ import { toast } from "sonner";
 import { Icons } from "../icons/icons";
 
 export function UserLinkForm() {
+  const { t } = useLanguage();
   const user = useCurrentUser();
   // console.log('UserLinkForm, user:', user);
   const { update } = useSession();
@@ -26,7 +28,7 @@ export function UserLinkForm() {
   };
 
   const form = useForm<UserLinkData>({
-    resolver: zodResolver(UserLinkSchema),
+    resolver: zodResolver(createUserLinkSchema(t)),
     defaultValues: {
       link: user?.link || "",
     },
@@ -49,7 +51,7 @@ export function UserLinkForm() {
           }
         })
         .catch(() => {
-          toast.error("Something went wrong");
+          toast.error(t("toast.somethingWrong"));
         });
     });
   });
@@ -57,19 +59,19 @@ export function UserLinkForm() {
   return (
     <form onSubmit={onSubmit}>
       <SectionColumns
-        title="Your Link"
-        description="Please enter your portfolio link"
+        title={t("settings.yourLink")}
+        description={t("settings.yourLinkDesc")}
       >
         <div className="flex w-full items-center gap-2">
           <Label className="sr-only" htmlFor="name">
-            Link
+            {t("settings.linkLabel")}
           </Label>
           <Input
             id="link"
             className="flex-1"
             size={128}
             {...form.register("link")}
-            placeholder="Enter your link, max 128 characters"
+            placeholder={t("settings.linkPlaceholder")}
             onChange={(e) => checkUpdate(e.target.value)}
           />
           <Button
@@ -80,12 +82,12 @@ export function UserLinkForm() {
             {isPending ? (
               <div className="flex items-center gap-2">
                 <Icons.spinner className="size-4 animate-spin" />
-                <p>Saving...</p>
+                <p>{t("settings.saving")}</p>
               </div>
             ) : (
               <p>
-                Save
-                <span className="hidden sm:inline-flex">&nbsp;Changes</span>
+                {t("settings.save")}
+                <span className="hidden sm:inline-flex">&nbsp;{t("settings.saveChanges")}</span>
               </p>
             )}
           </Button>
@@ -97,7 +99,7 @@ export function UserLinkForm() {
             </p>
           )}
           <p className="text-[13px] text-muted-foreground">
-            Max 128 characters
+            {t("settings.max128")}
           </p>
         </div>
       </SectionColumns>

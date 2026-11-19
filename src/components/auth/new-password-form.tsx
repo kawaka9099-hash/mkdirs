@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/i18n/language-provider";
-import { NewPasswordSchema } from "@/lib/schemas";
+import { NewPasswordSchema, createNewPasswordSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -33,7 +33,7 @@ export const NewPasswordForm = () => {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof NewPasswordSchema>>({
-    resolver: zodResolver(NewPasswordSchema),
+    resolver: zodResolver(createNewPasswordSchema(t)),
     defaultValues: {
       password: "",
     },

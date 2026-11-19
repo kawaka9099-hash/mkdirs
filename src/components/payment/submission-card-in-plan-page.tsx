@@ -2,6 +2,7 @@
 
 import SubmissionStatus from "@/components/dashboard/submission-status";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useLanguage } from "@/i18n/language-provider";
 import { getLocaleDate } from "@/lib/utils";
 import type { ItemInfo } from "@/types";
 import SubmissionCardImage from "../dashboard/submission-card-image";
@@ -13,6 +14,13 @@ type SubmissionCardInPlanPageProps = {
 export default function SubmissionCardInPlanPage({
   item,
 }: SubmissionCardInPlanPageProps) {
+  const { t } = useLanguage();
+  const planLabel =
+    item.pricePlan === "sponsor"
+      ? t("dashboard.planSponsor")
+      : item.pricePlan === "pro"
+        ? t("dashboard.planPro")
+        : t("dashboard.planFree");
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:gap-8 w-full">
       {/* Left column */}
@@ -31,28 +39,28 @@ export default function SubmissionCardInPlanPage({
 
           <div className="grid grid-cols-2 gap-4 text-sm pt-2">
             <div className="flex items-center gap-2">
-              <span className="text-muted-foreground">Plan:</span>
-              <span className="capitalize">{item.pricePlan}</span>
+              <span className="text-muted-foreground">{t("dashboard.plan")}</span>
+              <span className="capitalize">{planLabel}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-muted-foreground">Status:</span>
+              <span className="text-muted-foreground">{t("dashboard.status")}</span>
               <SubmissionStatus item={item} />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm pt-2">
             <div className="flex items-center gap-2">
-              <span className="text-muted-foreground">Publish Date:</span>
+              <span className="text-muted-foreground">{t("dashboard.publishDate")}</span>
               {item.publishDate ? (
                 <span className="font-medium">
                   {getLocaleDate(item.publishDate)}
                 </span>
               ) : (
-                <span className="font-semibold">Not published</span>
+                <span className="font-semibold">{t("dashboard.notPublished")}</span>
               )}
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-muted-foreground">Created Date:</span>
+              <span className="text-muted-foreground">{t("dashboard.createdDate")}</span>
               <span className="">{getLocaleDate(item._createdAt)}</span>
             </div>
           </div>

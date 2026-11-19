@@ -3,6 +3,7 @@
 import { publish } from "@/actions/publish";
 import { Icons } from "@/components/icons/icons";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/i18n/language-provider";
 import type { ItemInfo } from "@/types";
 import confetti from "canvas-confetti";
 import { RocketIcon } from "lucide-react";
@@ -17,6 +18,7 @@ interface PublishNowButtonProps {
 }
 
 export function PublishNowButton({ item }: PublishNowButtonProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -37,7 +39,7 @@ export function PublishNowButton({ item }: PublishNowButtonProps) {
         })
         .catch((error) => {
           console.error("publishAction, error:", error);
-          toast.error("Failed to publish");
+          toast.error(t("toast.failedPublish"));
         });
     });
   };
@@ -53,12 +55,12 @@ export function PublishNowButton({ item }: PublishNowButtonProps) {
       {isPending ? (
         <div className="flex items-center justify-center">
           <Icons.spinner className="mr-2 size-4 animate-spin" />
-          <span>Publishing...</span>
+          <span>{t("dashboard.publishing")}</span>
         </div>
       ) : (
         <div className="flex items-center justify-center">
           <RocketIcon className="mr-2 size-4 icon-scale" />
-          <span>Publish Now</span>
+          <span>{t("dashboard.publishNow")}</span>
         </div>
       )}
     </Button>

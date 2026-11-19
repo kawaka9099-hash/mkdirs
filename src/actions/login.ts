@@ -2,6 +2,7 @@
 
 import { signIn } from "@/auth";
 import { getUserByEmail } from "@/data/user";
+import { getServerT } from "@/i18n/server";
 import { sendVerificationEmail } from "@/lib/mail";
 import { LoginSchema } from "@/lib/schemas";
 import { generateVerificationToken } from "@/lib/tokens";
@@ -19,15 +20,16 @@ export async function login(
   values: z.infer<typeof LoginSchema>,
   callbackUrl?: string | null,
 ): Promise<ServerActionResponse> {
+  const { t } = await getServerT();
   const validatedFields = LoginSchema.safeParse(values);
   if (!validatedFields.success) {
-    return { status: "error", message: "Invalid fields!" };
+    return { status: "error", message: t("toast.invalidFields") };
   }
 
   const { email, password } = validatedFields.data;
   const existingUser = await getUserByEmail(email);
   if (!existingUser || !existingUser.email || !existingUser.password) {
-    return { status: "error", message: "User does not exist!" };
+    return { status: "error", message: t("toast.userNotExist") };
   }
 
   if (!existingUser.emailVerified) {
@@ -40,7 +42,7 @@ export async function login(
     );
     return {
       status: "success",
-      message: "Please check your email for verification",
+      message: t("toast.checkEmailVerification"),
     };
   }
 
@@ -56,7 +58,7 @@ export async function login(
 
     return {
       status: "success",
-      message: "Login success",
+      message: t("toast.loginSuccess"),
       redirectUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     };
   } catch (error) {
@@ -64,11 +66,11 @@ export async function login(
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { status: "error", message: "Invalid credentials!" };
+          return { status: "error", message: t("toast.invalidCredentials") };
         default:
-          return { status: "error", message: "Something went wrong!" };
+          return { status: "error", message: t("toast.somethingWrong") };
       }
     }
-    return { status: "error", message: "Something went wrong!" };
+    return { status: "error", message: t("toast.somethingWrong") };
   }
 }

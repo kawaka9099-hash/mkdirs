@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { type UserPasswordData, UserPasswordSchema } from "@/lib/schemas";
+import { useLanguage } from "@/i18n/language-provider";
+import { type UserPasswordData, createUserPasswordSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { useTransition } from "react";
@@ -15,6 +16,7 @@ import { toast } from "sonner";
 import { Icons } from "../icons/icons";
 
 export function UserPasswordForm() {
+  const { t } = useLanguage();
   const user = useCurrentUser();
   if (!user || user.isOAuth) {
     console.log("UserPasswordForm, oauth user has no password");
@@ -25,7 +27,7 @@ export function UserPasswordForm() {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<UserPasswordData>({
-    resolver: zodResolver(UserPasswordSchema),
+    resolver: zodResolver(createUserPasswordSchema(t)),
     defaultValues: {
       password: "",
       newPassword: "",
@@ -49,7 +51,7 @@ export function UserPasswordForm() {
           }
         })
         .catch(() => {
-          toast.error("Something went wrong");
+          toast.error(t("toast.somethingWrong"));
         });
     });
   });
@@ -57,16 +59,16 @@ export function UserPasswordForm() {
   return (
     <form onSubmit={onSubmit}>
       <SectionColumns
-        title="Change Password"
-        description="Please enter your new password"
+        title={t("settings.changePassword")}
+        description={t("settings.changePasswordDesc")}
       >
         <div className="flex flex-col gap-4 w-full rounded-lg border p-4">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="password">Current Password</Label>
+            <Label htmlFor="password">{t("settings.currentPassword")}</Label>
             <Input
               id="password"
               type="password"
-              placeholder="Enter your current password"
+              placeholder={t("settings.currentPasswordPlaceholder")}
               {...form.register("password")}
             />
             <div className="flex flex-col justify-between p-1">
@@ -78,12 +80,12 @@ export function UserPasswordForm() {
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="newPassword">New Password</Label>
+            <Label htmlFor="newPassword">{t("settings.newPassword")}</Label>
             <Input
               id="newPassword"
               type="password"
               {...form.register("newPassword")}
-              placeholder="Enter your new password"
+              placeholder={t("settings.newPasswordPlaceholder")}
             />
             <div className="flex flex-col justify-between p-1">
               {form.formState.errors?.newPassword && (
@@ -94,12 +96,12 @@ export function UserPasswordForm() {
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="confirmPassword">Confirm New Password</Label>
+            <Label htmlFor="confirmPassword">{t("settings.confirmPassword")}</Label>
             <Input
               id="confirmPassword"
               type="password"
               {...form.register("confirmPassword")}
-              placeholder="Confirm your new password"
+              placeholder={t("settings.confirmPasswordPlaceholder")}
             />
             <div className="flex flex-col justify-between p-1">
               {form.formState.errors?.confirmPassword && (
@@ -118,10 +120,10 @@ export function UserPasswordForm() {
               {isPending ? (
                 <div className="flex items-center gap-2">
                   <Icons.spinner className="size-4 animate-spin" />
-                  <p>Updating...</p>
+                  <p>{t("submit.updating")}</p>
                 </div>
               ) : (
-                <p>Update Password</p>
+                <p>{t("settings.updatePassword")}</p>
               )}
             </Button>
           </div>

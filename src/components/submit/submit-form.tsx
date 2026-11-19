@@ -27,8 +27,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
+import { useLanguage } from "@/i18n/language-provider";
 import { SUPPORT_AI_SUBMIT, SUPPORT_ITEM_ICON } from "@/lib/constants";
-import { SubmitSchema } from "@/lib/schemas";
+import { createSubmitSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 import type {
   CategoryListQueryResult,
@@ -54,6 +55,7 @@ interface SubmitFormProps {
  * https://react-hook-form.com/get-started
  */
 export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isUploading, setIsUploading] = useState(false);
@@ -64,7 +66,7 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
 
   // set default values for form fields and validation schema
   const form = useForm<SubmitFormData>({
-    resolver: zodResolver(SubmitSchema),
+    resolver: zodResolver(createSubmitSchema(t)),
     defaultValues: {
       name: "",
       link: "",
@@ -96,7 +98,7 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
         })
         .catch((error) => {
           console.error("SubmitForm, error:", error);
-          toast.error("Something went wrong");
+          toast.error(t("toast.somethingWrong"));
         });
     });
   });
@@ -124,7 +126,7 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
   const handleAIFetch = async () => {
     const link = form.getValues("link");
     if (!link) {
-      toast.error("Please enter a valid website URL first");
+      toast.error(t("toast.enterValidUrl"));
       setDialogOpen(false);
       return;
     }
@@ -178,10 +180,10 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
         setIconUrl(data.icon);
       }
 
-      toast.success("AI fetch website info completed!");
+      toast.success(t("toast.aiFetchDone"));
     } catch (error) {
       console.error("SubmitForm, handleAIFetch, error:", error);
-      toast.error("Failed to fetch website info");
+      toast.error(t("toast.failedFetchWebsite"));
     } finally {
       setIsAIProcessing(false);
       setDialogOpen(false);
@@ -199,11 +201,11 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
                 name="link"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Link</FormLabel>
+                    <FormLabel>{t("submit.link")}</FormLabel>
                     <div className="relative">
                       <FormControl>
                         <Input
-                          placeholder="Enter the link to your product"
+                          placeholder={t("submit.linkPlaceholder")}
                           className={cn(SUPPORT_AI_SUBMIT && "pr-[100px]")}
                           {...field}
                         />
@@ -222,28 +224,28 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
                               ) : (
                                 <Wand2Icon className="h-4 w-4" />
                               )}
-                              <span className="text-xs">AI Autofill</span>
+                              <span className="text-xs">{t("submit.aiAutofill")}</span>
                             </Button>
                           </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
-                              <DialogTitle>AI Autofill</DialogTitle>
+                              <DialogTitle>{t("submit.aiAutofill")}</DialogTitle>
                               <DialogDescription>
-                                Would you like AI to automatically fill in the form by the URL? It may take some time, so please wait patiently.
+                                {t("submit.aiAutofillDesc")}
                               </DialogDescription>
                             </DialogHeader>
                             <div className="flex justify-end gap-2">
                               <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                                Cancel
+                                {t("submit.cancel")}
                               </Button>
                               <Button onClick={handleAIFetch} disabled={isAIProcessing}>
                                 {isAIProcessing ? (
                                   <>
                                     <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                    Analyzing...
+                                    {t("submit.analyzing")}
                                   </>
                                 ) : (
-                                  "Analyze"
+                                  t("submit.analyze")
                                 )}
                               </Button>
                             </div>
@@ -260,10 +262,10 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
                 name="name"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>{t("submit.name")}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter the name of your product"
+                        placeholder={t("submit.namePlaceholder")}
                         {...field}
                       />
                     </FormControl>
@@ -279,7 +281,7 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
                 name="categories"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Categories</FormLabel>
+                    <FormLabel>{t("submit.categories")}</FormLabel>
                     <FormControl>
                       <MultiSelect
                         className="shadow-none"
@@ -289,7 +291,7 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
                         }))}
                         onValueChange={(selected) => field.onChange(selected)}
                         value={field.value}
-                        placeholder="Select categories"
+                        placeholder={t("submit.categoriesPlaceholder")}
                         variant="default"
                         maxCount={3}
                       />
@@ -303,7 +305,7 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
                 name="tags"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Tags</FormLabel>
+                    <FormLabel>{t("submit.tags")}</FormLabel>
                     <FormControl>
                       <MultiSelect
                         className="shadow-none"
@@ -313,7 +315,7 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
                         }))}
                         onValueChange={(selected) => field.onChange(selected)}
                         value={field.value}
-                        placeholder="Select tags"
+                        placeholder={t("submit.tagsPlaceholder")}
                         variant="default"
                         maxCount={3}
                       />
@@ -329,10 +331,10 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>{t("submit.description")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter a brief description of your product"
+                      placeholder={t("submit.descriptionPlaceholder")}
                       {...field}
                       className="resize-none"
                     />
@@ -349,9 +351,9 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
                 <FormItem>
                   <FormLabel>
                     <div className="flex items-center justify-between gap-4">
-                      <span>Introduction</span>
+                      <span>{t("submit.introduction")}</span>
                       <span className="text-xs text-muted-foreground">
-                        (Markdown supported)
+                        {t("submit.markdownSupported")}
                       </span>
                     </div>
                   </FormLabel>
@@ -372,9 +374,9 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
                     <FormItem className="flex-1">
                       <FormLabel>
                         <div className="flex items-center justify-between gap-4">
-                          <span>Icon</span>
+                          <span>{t("submit.icon")}</span>
                           <span className="text-xs text-muted-foreground">
-                            (1:1, PNG or JPEG, max 1MB)
+                            {t("submit.iconHint")}
                           </span>
                         </div>
                       </FormLabel>
@@ -399,9 +401,9 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
                   <FormItem className="flex-1">
                     <FormLabel>
                       <div className="flex items-center justify-between gap-4">
-                        <span>Image</span>
+                        <span>{t("submit.image")}</span>
                         <span className="text-xs text-muted-foreground">
-                          (16:9, PNG or JPEG, max 1MB)
+                          {t("submit.imageHint")}
                         </span>
                       </div>
                     </FormLabel>
@@ -437,15 +439,15 @@ export function SubmitForm({ tagList, categoryList }: SubmitFormProps) {
               )}
               <span>
                 {isPending
-                  ? "Submitting..."
+                  ? t("dashboard.submitting")
                   : isUploading
-                    ? "Uploading image..."
-                    : "Submit"}
+                    ? t("submit.uploadingImage")
+                    : t("submit.submit")}
               </span>
             </Button>
             <div className="text-sm text-muted-foreground flex items-center justify-center sm:justify-start gap-2">
               <SmileIcon className="h-6 w-4" />
-              <span>No worries, you can change these information later.</span>
+              <span>{t("submit.changeLater")}</span>
             </div>
           </CardFooter>
         </Card>

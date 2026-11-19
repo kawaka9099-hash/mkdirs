@@ -3,14 +3,18 @@ import EmptyGrid from "@/components/shared/empty-grid";
 import CustomPagination from "@/components/shared/pagination";
 import { siteConfig } from "@/config/site";
 import { getBlogs } from "@/data/blog";
+import { getServerT } from "@/i18n/server";
 import { POSTS_PER_PAGE } from "@/lib/constants";
 import { constructMetadata } from "@/lib/metadata";
 
-export const metadata = constructMetadata({
-  title: "Blog",
-  description: "Read our latest blog posts",
-  canonicalUrl: `${siteConfig.url}/blog`,
-});
+export async function generateMetadata() {
+  const { t } = await getServerT();
+  return constructMetadata({
+    title: t("misc.blog"),
+    description: t("misc.blogSubtitle"),
+    canonicalUrl: `${siteConfig.url}/blog`,
+  });
+}
 
 export default async function BlogIndexPage({
   searchParams,

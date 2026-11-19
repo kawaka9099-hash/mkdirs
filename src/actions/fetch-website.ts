@@ -1,5 +1,6 @@
 "use server";
 
+import { getServerT } from "@/i18n/server";
 import { slugify } from "@/lib/utils";
 import type { Category, Tag } from "@/sanity.types";
 import { sanityClient } from "@/sanity/lib/client";
@@ -50,11 +51,12 @@ export type ServerActionResponse = {
  * fetch info for the specified url
  */
 export async function fetchWebsite(url: string): Promise<ServerActionResponse> {
+  const { t } = await getServerT();
   try {
     if (!process.env.DEFAULT_AI_PROVIDER) {
       return {
         status: "error",
-        message: "AI submit is not supported",
+        message: t("toast.aiNotSupported"),
       };
     }
 
@@ -62,19 +64,19 @@ export async function fetchWebsite(url: string): Promise<ServerActionResponse> {
     if (data === null) {
       return {
         status: "error",
-        message: "Failed to fetch website info",
+        message: t("toast.failedFetchWebsite"),
       };
     }
     return {
       status: "success",
-      message: "Successfully fetched website info",
+      message: t("toast.fetchWebsiteOk"),
       data,
     };
   } catch (error) {
     console.error("fetchWebsite, fetch website:", url, "error:", error);
     return {
       status: "error",
-      message: "Failed to fetch website info",
+      message: t("toast.failedFetchWebsite"),
     };
   }
 }

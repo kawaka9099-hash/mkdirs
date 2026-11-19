@@ -3,6 +3,7 @@
 import { submitToReview } from "@/actions/submit-to-review";
 import { Icons } from "@/components/icons/icons";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/i18n/language-provider";
 import { FreePlanStatus } from "@/lib/submission";
 import { cn } from "@/lib/utils";
 import type { ItemInfo } from "@/types";
@@ -23,6 +24,7 @@ interface FreePlanButtonProps {
 }
 
 export function FreePlanButton({ item, className }: FreePlanButtonProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   // console.log('FreePlanButton, item:', item);
@@ -34,7 +36,7 @@ export function FreePlanButton({ item, className }: FreePlanButtonProps) {
           if (data.status === "success") {
             console.log("submitToReviewAction, success:", data.message);
             router.refresh();
-            toast.success("Successfully submitted to review");
+            toast.success(t("toast.submittedToReviewOk"));
           }
           if (data.status === "error") {
             console.error("submitToReviewAction, error:", data.message);
@@ -43,7 +45,7 @@ export function FreePlanButton({ item, className }: FreePlanButtonProps) {
         })
         .catch((error) => {
           console.error("submitToReviewAction, error:", error);
-          toast.error("Failed to submit to review");
+          toast.error(t("toast.failedSubmitToReview"));
         });
     });
   };
@@ -89,45 +91,45 @@ export function FreePlanButton({ item, className }: FreePlanButtonProps) {
     >
       {!item ? (
         <div className="flex items-center justify-center gap-2">
-          <span>Go Submit</span>
+          <span>{t("dashboard.goSubmit")}</span>
           <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
         </div>
       ) : item.publishDate ? (
         <div className="flex items-center justify-center">
           <ArrowUpLeftIcon className="mr-2 size-4 icon-scale" />
-          <span>Go Dashboard</span>
+          <span>{t("dashboard.goDashboard")}</span>
         </div>
       ) : (
         <div>
           {isPending ? (
             <div className="flex items-center justify-center">
               <Icons.spinner className="mr-2 size-4 animate-spin" />
-              <span>Submitting...</span>
+              <span>{t("dashboard.submitting")}</span>
             </div>
           ) : item.freePlanStatus === FreePlanStatus.PENDING ? (
             <div className="flex items-center justify-center">
               <ArrowUpLeftIcon className="mr-2 size-4 icon-scale" />
-              <span>Go dashboard and Wait</span>
+              <span>{t("dashboard.goDashboardWait")}</span>
             </div>
           ) : item.freePlanStatus === FreePlanStatus.APPROVED ? (
             <div className="flex items-center justify-center">
               <CheckCircleIcon className="mr-2 size-4 icon-scale" />
-              <span>Go Publish</span>
+              <span>{t("dashboard.goPublish")}</span>
             </div>
           ) : item.freePlanStatus === FreePlanStatus.REJECTED ? (
             <div className="flex items-center justify-center">
               <EditIcon className="mr-2 size-4 icon-scale" />
-              <span>Go Edit</span>
+              <span>{t("dashboard.goEdit")}</span>
             </div>
           ) : item.freePlanStatus === FreePlanStatus.SUBMITTING ? (
             <div className="flex items-center justify-center">
               <SendIcon className="mr-2 size-4 icon-scale" />
-              <span>Submit to review</span>
+              <span>{t("dashboard.submitToReview")}</span>
             </div>
           ) : (
             <div className="flex items-center justify-center">
               <ArrowUpLeftIcon className="mr-2 size-4 icon-scale" />
-              <span>Go Dashboard</span>
+              <span>{t("dashboard.goDashboard")}</span>
             </div>
           )}
         </div>

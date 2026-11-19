@@ -1,5 +1,6 @@
 import { EditForm } from "@/components/edit/edit-form";
 import { siteConfig } from "@/config/site";
+import { getServerT } from "@/i18n/server";
 import { currentUser } from "@/lib/auth";
 import { constructMetadata } from "@/lib/metadata";
 import type {
@@ -21,9 +22,10 @@ export async function generateMetadata({
 }: {
   params: { id: string };
 }): Promise<Metadata | undefined> {
+  const { t } = await getServerT();
   return constructMetadata({
-    title: "Edit product information",
-    description: "Edit product information",
+    title: t("dashboard.editTitle"),
+    description: t("dashboard.editSubtitle"),
     canonicalUrl: `${siteConfig.url}/edit/${params.id}`,
   });
 }

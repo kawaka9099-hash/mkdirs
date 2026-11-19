@@ -1,6 +1,7 @@
 import SubmissionCardInPublishPage from "@/components/publish/submission-card-in-publish-page";
 import ConfettiEffect from "@/components/shared/confetti-effect";
 import { siteConfig } from "@/config/site";
+import { getServerT } from "@/i18n/server";
 import { currentUser } from "@/lib/auth";
 import { constructMetadata } from "@/lib/metadata";
 import { FreePlanStatus, PricePlans, ProPlanStatus } from "@/lib/submission";
@@ -15,9 +16,10 @@ export async function generateMetadata({
 }: {
   params: { id: string };
 }): Promise<Metadata | undefined> {
+  const { t } = await getServerT();
   return constructMetadata({
-    title: "Submit your product (3/3)",
-    description: "Submit your product (3/3) Review and publish product",
+    title: t("submit.meta3Title"),
+    description: t("submit.meta3Desc"),
     canonicalUrl: `${siteConfig.url}/publish/${params.id}`,
   });
 }

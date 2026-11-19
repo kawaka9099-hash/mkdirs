@@ -124,7 +124,7 @@ export function SearchFilterClient({
       <ResponsiveComboBox
         filterItemList={categoryFilterItemList}
         placeholder={t("search.allCategories")}
-        labelPrefix="Category: "
+        labelPrefix={t("search.categoryPrefix")}
         selectedValue={selectedCategory || DEFAULT_FILTER_VALUE}
         onValueChange={(value) => handleFilterChange("category", value)}
       />

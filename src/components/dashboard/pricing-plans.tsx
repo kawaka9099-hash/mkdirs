@@ -4,6 +4,7 @@ import { FreePlanButton } from "@/components/payment/free-plan-button";
 import { ProPlanButton } from "@/components/payment/pro-plan-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { priceConfig } from "@/config/price";
+import { useLanguage } from "@/i18n/language-provider";
 import { PricePlans } from "@/lib/submission";
 import { cn } from "@/lib/utils";
 import type { ItemInfo, PricePlan } from "@/types/index";
@@ -37,12 +38,42 @@ interface PricingPlanCardProps {
 }
 
 const PricingPlanCard = ({ item, pricePlan }: PricingPlanCardProps) => {
+  const { t } = useLanguage();
+  // Plan titles / benefits / limitations in price.ts stay in English;
+  // they are translated here by exact source string so the config
+  // (and its Stripe price ids) never needs to change.
+  const planTitleByKey: Record<string, string> = {
+    free: t("plans.free"),
+    pro: t("plans.pro"),
+    sponsor: t("plans.sponsor"),
+  };
+  const benefitByText: Record<string, string> = {
+    "Get 3 dofollow links to boost your SEO": t("plans.benefitDofollow3"),
+    "Permanent link with backlink maintenance": t("plans.benefitPermanentLink"),
+    "Reviewed and listed within 72 hours": t("plans.benefitReviewed72h"),
+    "Publish your product the day you want": t("plans.benefitPublishDay"),
+    "Backlink to our site is required": t("plans.limitBacklink"),
+    "No customer support": t("plans.limitNoSupport"),
+    "Get >= 3 dofollow links to boost your SEO": t("plans.benefitDofollow3Plus"),
+    "List right now, publish whenever you want": t("plans.benefitListNow"),
+    "Permanent link, no backlink required": t("plans.benefitPermanentNoBacklink"),
+    "Featured placement at the top of listings": t("plans.benefitFeaturedTop"),
+    "Share through social media and newsletters": t("plans.benefitSocialShare"),
+    "Premium customer support": t("plans.benefitPremiumSupport"),
+    "Everything in Pro plan": t("plans.benefitEverythingPro"),
+    "Promote your product on almost every page": t("plans.benefitPromoteEveryPage"),
+    "Available for all kinds of product": t("plans.benefitAllProducts"),
+    "Only one advertisement per period": t("plans.benefitOneAd"),
+    "Schedule your advertising period": t("plans.benefitScheduleAd"),
+  };
+  const translateBenefit = (text: string) => benefitByText[text] ?? text;
+
   return (
     <div className="relative pt-4">
       {isProPlan(pricePlan) && (
         <div className="absolute top-0.5 left-1/2 transform -translate-x-1/2 z-10">
           <div className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
-            POPULAR
+            {t("plans.popular")}
           </div>
         </div>
       )}
@@ -55,7 +86,7 @@ const PricingPlanCard = ({ item, pricePlan }: PricingPlanCardProps) => {
         {/* price plan title and price */}
         <div className="bg-muted/50 p-6 pr-10 border-b flex flex-row items-center justify-between">
           <span className="text-2xl font-bold uppercase tracking-wider">
-            {pricePlan.title}
+            {planTitleByKey[pricePlan.title.toLowerCase()] ?? pricePlan.title}
           </span>
           <div className="flex items-baseline gap-2">
             <div className="text-4xl font-semibold font-workSans leading-relaxed text-primary">
@@ -74,14 +105,14 @@ const PricingPlanCard = ({ item, pricePlan }: PricingPlanCardProps) => {
               {pricePlan.benefits.map((feature) => (
                 <div key={feature} className="flex items-start gap-x-4">
                   <CheckIcon className="text-primary size-4 shrink-0 text-primary-500 mt-0.5" />
-                  <p>{feature}</p>
+                  <p>{translateBenefit(feature)}</p>
                 </div>
               ))}
 
               {pricePlan.limitations.map((feature) => (
                 <div key={feature} className="flex items-start gap-x-4">
                   <XIcon className="size-4 shrink-0 mt-0.5" />
-                  <p className="text-muted-foreground">{feature}</p>
+                  <p className="text-muted-foreground">{translateBenefit(feature)}</p>
                 </div>
               ))}
             </div>

@@ -1,19 +1,21 @@
 import { CategoryFilter } from "@/components/category/category-filter";
 import Container from "@/components/container";
 import { HeaderSection } from "@/components/shared/header-section";
+import { getServerT } from "@/i18n/server";
 
-export default function CategoryLayout({
+export default async function CategoryLayout({
   children,
 }: { children: React.ReactNode }) {
+  const { t } = await getServerT();
   return (
     <div className="mb-16">
       <div className="mt-8">
         <div className="w-full flex flex-col items-center justify-center gap-8">
           <HeaderSection
             labelAs="h1"
-            label="Category"
+            label={t("misc.category")}
             titleAs="h2"
-            title="Explore by categories"
+            title={t("misc.exploreCategories")}
           />
 
           <div className="w-full">

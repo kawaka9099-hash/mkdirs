@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/i18n/language-provider";
-import { LoginSchema } from "@/lib/schemas";
+import { LoginSchema, createLoginSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -39,7 +39,7 @@ export const LoginForm = ({ className }: { className?: string }) => {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(createLoginSchema(t)),
     defaultValues: {
       email: "",
       password: "",

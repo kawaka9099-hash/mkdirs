@@ -3,6 +3,7 @@
 import { getItemById } from "@/data/item";
 import { currentUser } from "@/lib/auth";
 import type { SUPPORT_ITEM_ICON } from "@/lib/constants";
+import { getServerT } from "@/i18n/server";
 import { sendNotifySubmissionEmail } from "@/lib/mail";
 import { EditSchema } from "@/lib/schemas";
 import { FreePlanStatus, PricePlans } from "@/lib/submission";
@@ -59,10 +60,11 @@ export type ServerActionResponse = {
 export async function edit(
   formData: EditFormData,
 ): Promise<ServerActionResponse> {
+  const { t } = await getServerT();
   try {
     const user = await currentUser();
     if (!user) {
-      return { status: "error", message: "Unauthorized" };
+      return { status: "error", message: t("toast.unauthorized") };
     }
     console.log("edit, user:", user);
 
@@ -86,10 +88,10 @@ export async function edit(
     // check if the user is the submitter of the item
     const item = await getItemById(id);
     if (!item) {
-      return { status: "error", message: "Item not found!" };
+      return { status: "error", message: t("toast.itemNotFound") };
     }
     if (item.submitter._ref !== user.id) {
-      return { status: "error", message: "You are not allowed to do this!" };
+      return { status: "error", message: t("toast.notAllowed") };
     }
 
     const slug = slugify(name);
@@ -150,7 +152,7 @@ export async function edit(
     const res = await sanityClient.patch(id).set(data).commit();
     if (!res) {
       console.log("edit, fail");
-      return { status: "error", message: "Failed to update item" };
+      return { status: "error", message: t("toast.editFailed") };
     }
     // console.log("edit, success, res:", res);
 
@@ -176,9 +178,9 @@ export async function edit(
     // redirect to the updated item, but not working, still showing the old item
     revalidatePath(`/edit/${id}`);
     revalidatePath(`/item/${slug}`);
-    return { status: "success", message: "Successfully updated item" };
+    return { status: "success", message: t("toast.editSuccess") };
   } catch (error) {
     console.log("edit, error", error);
-    return { status: "error", message: "Failed to update item" };
+    return { status: "error", message: t("toast.editFailed") };
   }
 }

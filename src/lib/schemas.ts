@@ -1,203 +1,258 @@
 import * as z from "zod";
+import { dictionaries, translate } from "@/i18n/dictionaries";
 import { SUPPORT_ITEM_ICON } from "./constants";
+
+/**
+ * Validation messages are translated through the same 8-language
+ * dictionaries as the rest of the UI. Client forms build their schema
+ * with the current locale via createXxxSchema(t); server actions keep
+ * using the static schemas below, which default to the Chinese messages.
+ */
+export type TFunction = (
+  key: string,
+  vars?: Record<string, string | number>,
+) => string;
+
+const zhT: TFunction = (key, vars) => translate(dictionaries.zh, key, vars);
 
 /**
  * newsletter schema
  */
-export const NewsletterFormSchema = z.object({
-  email: z.string().email({
-    message: "Enter a valid email",
-  }),
-});
+export const createNewsletterFormSchema = (t: TFunction) =>
+  z.object({
+    email: z.string().email({
+      message: t("validation.validEmail"),
+    }),
+  });
+
+export const NewsletterFormSchema = createNewsletterFormSchema(zhT);
 
 export type NewsletterFormData = z.infer<typeof NewsletterFormSchema>;
 
 /**
  * submit item
  */
-export const baseSubmitSchema = {
+export const createBaseSubmitSchema = (t: TFunction) => ({
   name: z
     .string()
-    .min(1, { message: "Name is required" })
-    .max(32, { message: "Name must be 32 or fewer characters long" }),
-  link: z.string().url({ message: "Invalid url" }),
+    .min(1, { message: t("validation.nameRequired") })
+    .max(32, { message: t("validation.nameMax32") }),
+  link: z.string().url({ message: t("validation.invalidUrl") }),
   description: z
     .string()
-    .min(1, { message: "Description is required" })
-    .max(256, { message: "Description must be 256 or fewer characters long" }),
+    .min(1, { message: t("validation.descriptionRequired") })
+    .max(256, { message: t("validation.descriptionMax256") }),
   introduction: z
     .string()
-    .min(1, { message: "Introduction is required" })
+    .min(1, { message: t("validation.introductionRequired") })
     .max(4096, {
-      message: "Introduction must be 4096 or fewer characters long",
+      message: t("validation.introductionMax4096"),
     }),
-  tags: z.array(z.string()).min(1, { message: "Must select at least one tag" }),
+  tags: z
+    .array(z.string())
+    .min(1, { message: t("validation.tagRequired") }),
   categories: z
     .array(z.string())
-    .min(1, { message: "Must select at least one category" }),
-  imageId: z.string().min(1, { message: "Must upload an image" }),
-};
+    .min(1, { message: t("validation.categoryRequired") }),
+  imageId: z.string().min(1, { message: t("validation.imageRequired") }),
+});
 
-export const SubmitSchema = SUPPORT_ITEM_ICON
-  ? z.object({
-      ...baseSubmitSchema,
-      iconId: z.string().min(1, { message: "Must upload an icon" }),
-    })
-  : z.object(baseSubmitSchema);
+export const baseSubmitSchema = createBaseSubmitSchema(zhT);
+
+export const createSubmitSchema = (t: TFunction) =>
+  SUPPORT_ITEM_ICON
+    ? z.object({
+        ...createBaseSubmitSchema(t),
+        iconId: z.string().min(1, { message: t("validation.iconRequired") }),
+      })
+    : z.object(createBaseSubmitSchema(t));
+
+export const SubmitSchema = createSubmitSchema(zhT);
 
 /**
  * edit item
  */
-export const EditSchema = SubmitSchema.extend({
-  id: z.string().min(1, { message: "ID is required" }),
-  pricePlan: z.string().min(1, { message: "Price plan is required" }),
-  planStatus: z.string().min(1, { message: "Plan status is required" }),
-});
+export const createEditSchema = (t: TFunction) =>
+  createSubmitSchema(t).extend({
+    id: z.string().min(1, { message: t("validation.idRequired") }),
+    pricePlan: z
+      .string()
+      .min(1, { message: t("validation.pricePlanRequired") }),
+    planStatus: z
+      .string()
+      .min(1, { message: t("validation.planStatusRequired") }),
+  });
+
+export const EditSchema = createEditSchema(zhT);
 
 /**
  * account settings
  */
-export const SettingsSchema = z
-  .object({
-    name: z.string().min(1, { message: "Name is required" }),
-    link: z.string().optional(),
-    password: z.optional(z.string().min(6)),
-    newPassword: z.optional(z.string().min(6)),
-  })
-  .refine(
-    (data) => {
-      if (data.password && !data.newPassword) {
-        return false;
-      }
+export const createSettingsSchema = (t: TFunction) =>
+  z
+    .object({
+      name: z.string().min(1, { message: t("validation.nameRequired") }),
+      link: z.string().optional(),
+      password: z.optional(z.string().min(6)),
+      newPassword: z.optional(z.string().min(6)),
+    })
+    .refine(
+      (data) => {
+        if (data.password && !data.newPassword) {
+          return false;
+        }
 
-      return true;
-    },
-    {
-      message: "New password is required!",
-      path: ["newPassword"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.newPassword && !data.password) {
-        return false;
-      }
+        return true;
+      },
+      {
+        message: t("validation.newPasswordRequired"),
+        path: ["newPassword"],
+      },
+    )
+    .refine(
+      (data) => {
+        if (data.newPassword && !data.password) {
+          return false;
+        }
 
-      return true;
-    },
-    {
-      message: "Password is required!",
-      path: ["password"],
-    },
-  );
+        return true;
+      },
+      {
+        message: t("validation.passwordRequired"),
+        path: ["password"],
+      },
+    );
 
-export const UserNameSchema = z.object({
-  name: z
-    .string()
-    .min(1, { message: "Name is required" })
-    .max(32, { message: "Name must be 32 or fewer characters long" }),
-});
+export const SettingsSchema = createSettingsSchema(zhT);
+
+export const createUserNameSchema = (t: TFunction) =>
+  z.object({
+    name: z
+      .string()
+      .min(1, { message: t("validation.nameRequired") })
+      .max(32, { message: t("validation.nameMax32") }),
+  });
+
+export const UserNameSchema = createUserNameSchema(zhT);
 
 export type UserNameData = z.infer<typeof UserNameSchema>;
 
-export const UserLinkSchema = z.object({
-  link: z
-    .string()
-    .min(0, { message: "Link is optional" })
-    .max(128, { message: "Link must be 128 or fewer characters long" }),
-});
+export const createUserLinkSchema = (t: TFunction) =>
+  z.object({
+    link: z
+      .string()
+      .min(0, { message: t("validation.linkOptional") })
+      .max(128, { message: t("validation.linkMax128") }),
+  });
+
+export const UserLinkSchema = createUserLinkSchema(zhT);
 
 export type UserLinkData = z.infer<typeof UserLinkSchema>;
 
-export const UserPasswordSchema = z
-  .object({
-    password: z.string().min(6, {
-      message: "Minimum of 6 characters required",
-    }),
-    newPassword: z.string().min(6, {
-      message: "Minimum of 6 characters required",
-    }),
-    confirmPassword: z.string().min(6, {
-      message: "Minimum of 6 characters required",
-    }),
-  })
-  .refine(
-    (data) => {
-      if (data.newPassword && !data.password) {
-        return false;
-      }
+export const createUserPasswordSchema = (t: TFunction) =>
+  z
+    .object({
+      password: z.string().min(6, {
+        message: t("validation.min6Chars"),
+      }),
+      newPassword: z.string().min(6, {
+        message: t("validation.min6Chars"),
+      }),
+      confirmPassword: z.string().min(6, {
+        message: t("validation.min6Chars"),
+      }),
+    })
+    .refine(
+      (data) => {
+        if (data.newPassword && !data.password) {
+          return false;
+        }
 
-      return true;
-    },
-    {
-      message: "Password is required",
-      path: ["password"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.password && !data.newPassword) {
-        return false;
-      }
+        return true;
+      },
+      {
+        message: t("validation.passwordRequired"),
+        path: ["password"],
+      },
+    )
+    .refine(
+      (data) => {
+        if (data.password && !data.newPassword) {
+          return false;
+        }
 
-      return true;
-    },
-    {
-      message: "New password is required",
-      path: ["newPassword"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.newPassword !== data.confirmPassword) {
-        return false;
-      }
+        return true;
+      },
+      {
+        message: t("validation.newPasswordRequired"),
+        path: ["newPassword"],
+      },
+    )
+    .refine(
+      (data) => {
+        if (data.newPassword !== data.confirmPassword) {
+          return false;
+        }
 
-      return true;
-    },
-    {
-      message: "Passwords do not match",
-      path: ["confirmPassword"],
-    },
-  );
+        return true;
+      },
+      {
+        message: t("validation.passwordsMismatch"),
+        path: ["confirmPassword"],
+      },
+    );
+
+export const UserPasswordSchema = createUserPasswordSchema(zhT);
 
 export type UserPasswordData = z.infer<typeof UserPasswordSchema>;
 
 /**
  * auth related schemas
  */
-export const NewPasswordSchema = z.object({
-  password: z.string().min(6, {
-    message: "Minimum of 6 characters required",
-  }),
-});
+export const createNewPasswordSchema = (t: TFunction) =>
+  z.object({
+    password: z.string().min(6, {
+      message: t("validation.min6Chars"),
+    }),
+  });
 
-export const ResetSchema = z.object({
-  email: z.string().email({
-    message: "Email is required",
-  }),
-});
+export const NewPasswordSchema = createNewPasswordSchema(zhT);
 
-export const LoginSchema = z.object({
-  email: z.string().email({
-    message: "Email is required",
-  }),
-  password: z.string().min(1, {
-    message: "Password is required",
-  }),
-});
+export const createResetSchema = (t: TFunction) =>
+  z.object({
+    email: z.string().email({
+      message: t("validation.emailRequired"),
+    }),
+  });
 
-export const RegisterSchema = z.object({
-  email: z.string().email({
-    message: "Email is required",
-  }),
-  password: z.string().min(6, {
-    message: "Minimum 6 characters required",
-  }),
-  name: z.string().min(1, {
-    message: "Name is required",
-  }),
-});
+export const ResetSchema = createResetSchema(zhT);
+
+export const createLoginSchema = (t: TFunction) =>
+  z.object({
+    email: z.string().email({
+      message: t("validation.emailRequired"),
+    }),
+    password: z.string().min(1, {
+      message: t("validation.passwordRequired"),
+    }),
+  });
+
+export const LoginSchema = createLoginSchema(zhT);
+
+export const createRegisterSchema = (t: TFunction) =>
+  z.object({
+    email: z.string().email({
+      message: t("validation.emailRequired"),
+    }),
+    password: z.string().min(6, {
+      message: t("validation.min6Chars"),
+    }),
+    name: z.string().min(1, {
+      message: t("validation.nameRequired"),
+    }),
+  });
+
+export const RegisterSchema = createRegisterSchema(zhT);
 
 /**
  * og image schema

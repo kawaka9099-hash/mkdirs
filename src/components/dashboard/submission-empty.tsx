@@ -1,15 +1,17 @@
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Button } from "@/components/ui/button";
+import { getServerT } from "@/i18n/server";
 import { UploadIcon } from "lucide-react";
 import Link from "next/link";
 
-export default function EmptySubmission() {
+export default async function EmptySubmission() {
+  const { t } = await getServerT();
   return (
     <EmptyPlaceholder>
       <EmptyPlaceholder.Icon name="submit" className="size-8" />
-      <EmptyPlaceholder.Title>No submissions</EmptyPlaceholder.Title>
+      <EmptyPlaceholder.Title>{t("dashboard.noSubmissions")}</EmptyPlaceholder.Title>
       <EmptyPlaceholder.Description>
-        You don&apos;t have any submissions yet.
+        {t("dashboard.noSubmissionsDesc")}
       </EmptyPlaceholder.Description>
       <Button asChild size="lg" className="group whitespace-nowrap">
         <Link
@@ -18,7 +20,7 @@ export default function EmptySubmission() {
           className="flex items-center justify-center space-x-2"
         >
           <UploadIcon className="w-4 h-4" />
-          <span>Submit</span>
+          <span>{t("nav.submit")}</span>
         </Link>
       </Button>
     </EmptyPlaceholder>

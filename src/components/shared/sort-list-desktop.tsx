@@ -7,7 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DEFAULT_SORT, type SortFilterItem } from "@/lib/constants";
+import { useLanguage } from "@/i18n/language-provider";
+import { type SortFilterItem } from "@/lib/constants";
 import { createUrl } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,10 +18,20 @@ export type SortListProps = {
 };
 
 export function SortListDesktop({ sortList }: SortListProps) {
+  const { t } = useLanguage();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [active, setActive] = useState("");
+  // Sort labels are translated by slug, not by the English label
+  // in constants.ts, so the dropdown follows the chosen language.
+  const sortLabelBySlug: Record<string, string> = {
+    "date-asc": t("search.sortTimeAsc"),
+    "name-desc": t("search.sortNameDesc"),
+    "name-asc": t("search.sortNameAsc"),
+  };
+  const sortLabel = (item: SortFilterItem) =>
+    item.slug ? (sortLabelBySlug[item.slug] ?? item.label) : t("search.sortTimeDesc");
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -52,7 +63,7 @@ export function SortListDesktop({ sortList }: SortListProps) {
   return (
     <Select onValueChange={onSelectChange} value={active}>
       <SelectTrigger className="w-[220px] h-8 text-sm">
-        <SelectValue placeholder={DEFAULT_SORT.label} />
+        <SelectValue placeholder={t("search.sortTimeDesc")} />
       </SelectTrigger>
       <SelectContent className="text-sm">
         {sortList.map((item) => (
@@ -61,7 +72,7 @@ export function SortListDesktop({ sortList }: SortListProps) {
             value={item.slug}
             className="cursor-pointer"
           >
-            {item.label}
+            {sortLabel(item)}
           </SelectItem>
         ))}
       </SelectContent>

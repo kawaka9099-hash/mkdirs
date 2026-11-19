@@ -2,6 +2,7 @@
 
 import { currentUser } from "@/lib/auth";
 import type { SUPPORT_ITEM_ICON } from "@/lib/constants";
+import { getServerT } from "@/i18n/server";
 import { SubmitSchema } from "@/lib/schemas";
 import { FreePlanStatus, PricePlans } from "@/lib/submission";
 import { slugify } from "@/lib/utils";
@@ -34,10 +35,11 @@ export type ServerActionResponse = {
 export async function submit(
   formData: SubmitFormData,
 ): Promise<ServerActionResponse> {
+  const { t } = await getServerT();
   try {
     const user = await currentUser();
     if (!user) {
-      return { status: "error", message: "Unauthorized" };
+      return { status: "error", message: t("toast.unauthorized") };
     }
 
     // console.log("submit, data:", formData);
@@ -121,7 +123,7 @@ export async function submit(
     const res = await sanityClient.create(data);
     if (!res) {
       console.log("submit, fail");
-      return { status: "error", message: "Failed to submit" };
+      return { status: "error", message: t("toast.submitFailed") };
     }
 
     // console.log("submit, success, res:", res);
@@ -133,9 +135,9 @@ export async function submit(
     // You can do this with the revalidatePath function from Next.js.
     revalidatePath("/submit");
 
-    return { status: "success", message: "Successfully created", id: res._id };
+    return { status: "success", message: t("toast.submitSuccess"), id: res._id };
   } catch (error) {
     console.log("submit, error", error);
-    return { status: "error", message: "Failed to submit" };
+    return { status: "error", message: t("toast.submitFailed") };
   }
 }

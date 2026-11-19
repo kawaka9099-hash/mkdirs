@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/i18n/language-provider";
-import { ResetSchema } from "@/lib/schemas";
+import { ResetSchema, createResetSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -29,7 +29,7 @@ export const ResetForm = () => {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof ResetSchema>>({
-    resolver: zodResolver(ResetSchema),
+    resolver: zodResolver(createResetSchema(t)),
     defaultValues: {
       email: "",
     },
