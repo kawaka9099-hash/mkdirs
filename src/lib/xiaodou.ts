@@ -25,14 +25,27 @@ export type XiaodouConfig = {
   channelId: string;
 };
 
+/**
+ * 网关地址归一化：卖家中心展示的接口地址带 /submit.php 后缀
+ * （如 https://pay.xiaodouap.cn/submit.php），而下单/查单要在域名后
+ * 直接拼 /mapi.php 与 /api.php——带后缀拼出来就是死地址
+ * /submit.php/mapi.php，网关直接拒掉。去掉它再用。
+ */
+function normalizeGatewayUrl(raw: string): string {
+  return raw
+    .trim()
+    .replace(/\/$/, "")
+    .replace(/\/submit\.php$/i, "");
+}
+
 /** 按支付方式取商户配置：微信优先老渠道三值（配了才用），其余走主配置。 */
 export function getXiaodouConfig(
   payType: XiaodouPayType = "alipay",
 ): XiaodouConfig | null {
   if (payType === "wxpay") {
-    const gatewayUrl = (process.env.XIAODOU_WXPAY_GATEWAY_URL ?? "")
-      .trim()
-      .replace(/\/$/, "");
+    const gatewayUrl = normalizeGatewayUrl(
+      process.env.XIAODOU_WXPAY_GATEWAY_URL ?? "",
+    );
     const pid = (process.env.XIAODOU_WXPAY_PID ?? "").trim();
     const key = (process.env.XIAODOU_WXPAY_KEY ?? "").trim();
     if (gatewayUrl && pid && key) {
@@ -44,9 +57,9 @@ export function getXiaodouConfig(
       };
     }
   }
-  const gatewayUrl = (process.env.XIAODOU_GATEWAY_URL ?? "")
-    .trim()
-    .replace(/\/$/, "");
+  const gatewayUrl = normalizeGatewayUrl(
+    process.env.XIAODOU_GATEWAY_URL ?? "",
+  );
   const pid = (process.env.XIAODOU_PID ?? "").trim();
   const key = (process.env.XIAODOU_KEY ?? "").trim();
   if (!gatewayUrl || !pid || !key) {
@@ -136,7 +149,10 @@ async function callGateway(
     }
   }
   if (out.code !== "1") {
-    throw new Error("xiaodou request rejected");
+    // 把网关原话带进报错，否则只剩一句 rejected，查原因得再跑一轮。
+    throw new Error(
+      `xiaodou request rejected${out.msg ? `: ${out.msg}` : ""}`,
+    );
   }
   return out;
 }
