@@ -440,3 +440,18 @@ export const pageListQueryForSitemap = groq`*[_type == "page" && defined(slug.cu
 }`;
 
 // ======================================================================================================================
+
+/**
+ * Site Settings Queries
+ * Single settings document (singleton, id "settings").
+ * Logo / site name / nav menu editable in Studio.
+ */
+export const settingsQuery = defineQuery(`*[_type == "settings"][0] {
+  siteName,
+  logo,
+  logoDark,
+  "navMenu": navMenu[] {
+    label,
+    href
+  }
+}`);

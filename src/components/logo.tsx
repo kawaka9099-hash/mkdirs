@@ -6,11 +6,20 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export function Logo({ className }: { className?: string }) {
+export function Logo({
+  className,
+  src,
+  srcDark,
+}: {
+  className?: string;
+  // Logo from Studio settings (Settings). Falls back to site.ts defaults.
+  src?: string;
+  srcDark?: string;
+}) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const logoLight = siteConfig.logo;
-  const logoDark = siteConfig.logoDark ?? logoLight;
+  const logoLight = src ?? siteConfig.logo;
+  const logoDark = srcDark ?? siteConfig.logoDark ?? logoLight;
 
   // During server-side rendering and initial client render, always use logoLight
   // This prevents hydration mismatch

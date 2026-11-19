@@ -14,8 +14,10 @@ import { LanguageProvider } from "@/i18n/language-provider";
 import { getLocale } from "@/i18n/server";
 import { constructMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
+import { draftMode } from "next/headers";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
+import { VisualEditing } from "next-sanity";
 
 export const metadata = constructMetadata();
 
@@ -27,6 +29,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   // https://youtu.be/1MTyCvS05V4?t=21464
   const session = await auth();
   const locale = await getLocale();
+  // 展示（Presentation）工具要靠它和 Studio 建连：没挂它，预览页永远连不上。
+  const isDraftMode = draftMode().isEnabled;
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -63,6 +67,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             <Analytics />
           </ThemeProvider>
         </SessionProvider>
+
+        {isDraftMode && <VisualEditing />}
       </body>
     </html>
   );

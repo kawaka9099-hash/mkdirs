@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/i18n/language-provider";
 import { cn } from "@/lib/utils";
 import { createUrl } from "@/lib/utils";
 import { SearchIcon } from "lucide-react";
@@ -17,6 +18,7 @@ interface SearchBoxProps {
 
 export default function HomeSearchBox({ urlPrefix }: SearchBoxProps) {
   const router = useRouter();
+  const { t } = useLanguage();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams?.get("q") || "");
   const [debouncedQuery] = useDebounce(searchQuery, 300); // 300ms debounce
@@ -63,7 +65,7 @@ export default function HomeSearchBox({ urlPrefix }: SearchBoxProps) {
     <div className="flex items-center justify-center">
       <Input
         type="text"
-        placeholder="Search any products you need"
+        placeholder={t("search.placeholder")}
         autoComplete="off"
         value={searchQuery}
         onChange={handleSearch}
@@ -74,7 +76,7 @@ export default function HomeSearchBox({ urlPrefix }: SearchBoxProps) {
       />
       <Button type="submit" className="rounded-l-none size-12">
         <SearchIcon className="size-6" aria-hidden="true" />
-        <span className="sr-only">Search</span>
+        <span className="sr-only">{t("search.search")}</span>
       </Button>
     </div>
   );

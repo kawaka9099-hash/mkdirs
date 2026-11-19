@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { useLanguage } from "@/i18n/language-provider";
 import { cn } from "@/lib/utils";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import * as React from "react";
@@ -138,11 +139,12 @@ function FilterList({
   setOpen: (open: boolean) => void;
   onSelect: (item: FilterItem | null) => void;
 }) {
+  const { t } = useLanguage();
   return (
     <Command>
-      <CommandInput placeholder="Filter..." />
+      <CommandInput placeholder={t("common.filterPlaceholder")} />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>{t("common.noResults")}</CommandEmpty>
         <CommandGroup className="">
           {filterItemList.map((item) => (
             <CommandItem

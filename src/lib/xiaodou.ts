@@ -14,6 +14,10 @@ import { priceConfig } from "@/config/price";
  * XIAODOU_CHANNEL_ID（可选）。微信走老渠道（新渠道微信尚未开通）：
  * XIAODOU_WXPAY_GATEWAY_URL / XIAODOU_WXPAY_PID / XIAODOU_WXPAY_KEY /
  * XIAODOU_WXPAY_CHANNEL_ID（可选）；没配时微信回落主配置。
+ *
+ * 教训（2026-11-19 ¥0.1 实测）：网关回调可能一次都不来（该单 1 小时日志
+ * 零次 notify，回调地址本身是对的）——回调只作快路径，前端必须在进
+ * 付款页时就查一次状态、轮询跟收银台 30 分钟有效期对齐，不能只靠回调。
  */
 
 export type XiaodouPayType = "wxpay" | "alipay";
@@ -190,6 +194,7 @@ export async function xiaodouCreate(
     amountCents: number;
     clientIp: string;
     notifyUrl: string;
+    returnUrl?: string;
   },
 ): Promise<{ qrcode: string; tradeNo: string; outTradeNo: string }> {
   const outTradeNo = xiaodouOutTradeNo(opts.ref);
@@ -204,6 +209,10 @@ export async function xiaodouCreate(
     param: opts.ref,
     sign_type: "MD5",
   };
+  if (opts.returnUrl) {
+    // 付完收银台把用户浏览器带回付款页，进页时的状态检查会接住这笔。
+    params.return_url = opts.returnUrl;
+  }
   if (config.channelId) {
     params.cid = config.channelId;
   }

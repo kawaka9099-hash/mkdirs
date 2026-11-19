@@ -124,6 +124,12 @@ export type Dictionary = {
   };
   common: {
     back: string;
+    filterPlaceholder: string;
+    searchPlaceholder: string;
+    selectAll: string;
+    clear: string;
+    close: string;
+    noResults: string;
   };
   newsletter: {
     label: string;
@@ -154,6 +160,10 @@ export type Dictionary = {
     exploreCollections: string;
     exploreCategories: string;
     exploreTags: string;
+    themeToggle: string;
+    themeLight: string;
+    themeDark: string;
+    themeSystem: string;
   };
   pricing: {
     label: string;
@@ -513,6 +523,12 @@ const zh: Dictionary = {
   },
   common: {
     back: "返回",
+    filterPlaceholder: "筛选...",
+    searchPlaceholder: "搜索...",
+    selectAll: "(全选)",
+    clear: "清除",
+    close: "关闭",
+    noResults: "没有找到结果。",
   },
   newsletter: {
     label: "通讯",
@@ -543,6 +559,10 @@ const zh: Dictionary = {
     exploreCollections: "按合集浏览",
     exploreCategories: "按分类浏览",
     exploreTags: "按标签浏览",
+    themeToggle: "切换主题",
+    themeLight: "浅色",
+    themeDark: "深色",
+    themeSystem: "跟随系统",
   },
   pricing: {
     label: "定价",
@@ -683,7 +703,7 @@ const zh: Dictionary = {
     benefitListNow: "立即上架，也可以随时发布",
     benefitPermanentNoBacklink: "永久链接，无需回链",
     benefitFeaturedTop: "在列表顶部精选展示",
-    benefitSocialShare: "通过社交媒体和 newsletter 推广",
+    benefitSocialShare: "通过社交媒体和邮件订阅推广",
     benefitPremiumSupport: "高级客服支持",
     benefitEverythingPro: "包含专业版全部权益",
     benefitPromoteEveryPage: "几乎在每个页面推广你的产品",
@@ -695,7 +715,7 @@ const zh: Dictionary = {
     q1: "提交产品是免费的吗？",
     a1: "是免费的。\n免费提交可以获得 3 条 dofollow 外链，提升 SEO。\n但免费套餐有限制：\n- 72 小时内审核并上架\n- 需要回链到本站\n- 无客服支持",
     q2: "专业版套餐有什么好处？",
-    a2: "专业版套餐包含以下好处：\n- 至少 3 条 dofollow 外链\n- 立即上架，也可以随时发布\n- 永久链接，无需回链\n- 在列表中精选展示，带奖励图标\n- 通过我们的社交媒体和 newsletter 推广\n- 高级客服支持",
+    a2: "专业版套餐包含以下好处：\n- 至少 3 条 dofollow 外链\n- 立即上架，也可以随时发布\n- 永久链接，无需回链\n- 在列表中精选展示，带奖励图标\n- 通过我们的社交媒体和邮件订阅推广\n- 高级客服支持",
     q3: "免费套餐和专业版有什么区别？",
     a3: "免费套餐的提交会在 72 小时内审核并上架，需要回链到本站。\n专业版提交会立即收录，无需回链。\n两种套餐都可以随时发布、随时更新产品信息。",
     q4: "收录一定要提供回链吗？",
@@ -904,6 +924,12 @@ const en: Dictionary = {
   },
   common: {
     back: "Back",
+    filterPlaceholder: "Filter...",
+    searchPlaceholder: "Search...",
+    selectAll: "(Select All)",
+    clear: "Clear",
+    close: "Close",
+    noResults: "No results found.",
   },
   newsletter: {
     label: "Newsletter",
@@ -934,6 +960,10 @@ const en: Dictionary = {
     exploreCollections: "Explore by collections",
     exploreCategories: "Explore by categories",
     exploreTags: "Explore by tags",
+    themeToggle: "Toggle theme",
+    themeLight: "Light",
+    themeDark: "Dark",
+    themeSystem: "System",
   },
   pricing: {
     label: "Pricing",
@@ -1297,6 +1327,12 @@ const ja: Dictionary = {
   },
   common: {
     back: "戻る",
+    filterPlaceholder: "絞り込み...",
+    searchPlaceholder: "検索...",
+    selectAll: "(すべて選択)",
+    clear: "クリア",
+    close: "閉じる",
+    noResults: "結果が見つかりませんでした。",
   },
   newsletter: {
     label: "ニュースレター",
@@ -1327,6 +1363,10 @@ const ja: Dictionary = {
     exploreCollections: "コレクションから探す",
     exploreCategories: "カテゴリーから探す",
     exploreTags: "タグから探す",
+    themeToggle: "テーマを切り替え",
+    themeLight: "ライト",
+    themeDark: "ダーク",
+    themeSystem: "システム",
   },
   pricing: {
     label: "料金",
@@ -1687,6 +1727,12 @@ const ko: Dictionary = {
   },
   common: {
     back: "뒤로",
+    filterPlaceholder: "필터...",
+    searchPlaceholder: "검색...",
+    selectAll: "(전체 선택)",
+    clear: "지우기",
+    close: "닫기",
+    noResults: "결과가 없습니다.",
   },
   newsletter: {
     label: "뉴스레터",
@@ -1717,6 +1763,10 @@ const ko: Dictionary = {
     exploreCollections: "컬렉션으로 탐색",
     exploreCategories: "카테고리로 탐색",
     exploreTags: "태그로 탐색",
+    themeToggle: "테마 전환",
+    themeLight: "라이트",
+    themeDark: "다크",
+    themeSystem: "시스템",
   },
   pricing: {
     label: "요금",
@@ -2078,6 +2128,12 @@ const fr: Dictionary = {
   },
   common: {
     back: "Retour",
+    filterPlaceholder: "Filtrer...",
+    searchPlaceholder: "Rechercher...",
+    selectAll: "(Tout sélectionner)",
+    clear: "Effacer",
+    close: "Fermer",
+    noResults: "Aucun résultat.",
   },
   newsletter: {
     label: "Newsletter",
@@ -2108,6 +2164,10 @@ const fr: Dictionary = {
     exploreCollections: "Explorer les collections",
     exploreCategories: "Explorer les catégories",
     exploreTags: "Explorer les tags",
+    themeToggle: "Changer de thème",
+    themeLight: "Clair",
+    themeDark: "Sombre",
+    themeSystem: "Système",
   },
   pricing: {
     label: "Tarifs",
@@ -2471,6 +2531,12 @@ const es: Dictionary = {
   },
   common: {
     back: "Volver",
+    filterPlaceholder: "Filtrar...",
+    searchPlaceholder: "Buscar...",
+    selectAll: "(Seleccionar todo)",
+    clear: "Limpiar",
+    close: "Cerrar",
+    noResults: "Sin resultados.",
   },
   newsletter: {
     label: "Boletín",
@@ -2501,6 +2567,10 @@ const es: Dictionary = {
     exploreCollections: "Explorar colecciones",
     exploreCategories: "Explorar categorías",
     exploreTags: "Explorar etiquetas",
+    themeToggle: "Cambiar tema",
+    themeLight: "Claro",
+    themeDark: "Oscuro",
+    themeSystem: "Sistema",
   },
   pricing: {
     label: "Precios",
@@ -2864,6 +2934,12 @@ const pt: Dictionary = {
   },
   common: {
     back: "Voltar",
+    filterPlaceholder: "Filtrar...",
+    searchPlaceholder: "Pesquisar...",
+    selectAll: "(Selecionar tudo)",
+    clear: "Limpar",
+    close: "Fechar",
+    noResults: "Nenhum resultado encontrado.",
   },
   newsletter: {
     label: "Newsletter",
@@ -2894,6 +2970,10 @@ const pt: Dictionary = {
     exploreCollections: "Explorar coleções",
     exploreCategories: "Explorar categorias",
     exploreTags: "Explorar tags",
+    themeToggle: "Alterar tema",
+    themeLight: "Claro",
+    themeDark: "Escuro",
+    themeSystem: "Sistema",
   },
   pricing: {
     label: "Preços",
@@ -3257,6 +3337,12 @@ const de: Dictionary = {
   },
   common: {
     back: "Zurück",
+    filterPlaceholder: "Filtern...",
+    searchPlaceholder: "Suchen...",
+    selectAll: "(Alle auswählen)",
+    clear: "Löschen",
+    close: "Schließen",
+    noResults: "Keine Ergebnisse gefunden.",
   },
   newsletter: {
     label: "Newsletter",
@@ -3287,6 +3373,10 @@ const de: Dictionary = {
     exploreCollections: "Sammlungen entdecken",
     exploreCategories: "Kategorien entdecken",
     exploreTags: "Tags entdecken",
+    themeToggle: "Design wechseln",
+    themeLight: "Hell",
+    themeDark: "Dunkel",
+    themeSystem: "System",
   },
   pricing: {
     label: "Preise",

@@ -18,7 +18,7 @@ type ItemCardProps = {
  */
 export default function ItemCard({ item }: ItemCardProps) {
   const { t } = useLanguage();
-  const imageProps = item?.image ? urlForImage(item.image) : null;
+  const imageProps = item?.image ? urlForImage(item.image, 640) : null;
   const imageBlurDataURL = item?.image?.blurDataURL || null;
   // console.log(`ItemCard, imageBlurDataURL:${imageBlurDataURL}`);
   const itemUrlPrefix = "/item";

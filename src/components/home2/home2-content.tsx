@@ -2,6 +2,7 @@ import type {
   BlogPostListQueryResult,
   ItemListQueryResult,
 } from "@/sanity.types";
+import { getServerT } from "@/i18n/server";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import {
   blogPostListOfLatestQuery,
@@ -20,6 +21,7 @@ import ItemGrid2 from "../item/item-grid-2";
 import { Button } from "../ui/button";
 
 export async function HomeContent() {
+  const { dict } = await getServerT();
   const [featuredItems, latestItems, latestBlogPosts] = await Promise.all([
     sanityFetch<ItemListQueryResult>({
       query: itemListOfFeaturedQuery,
@@ -44,7 +46,7 @@ export async function HomeContent() {
             <div className="flex items-center gap-2">
               <SparklesIcon className="w-4 h-4 text-indigo-500" />
               <h2 className="text-lg tracking-wider font-semibold text-gradient_indigo-purple">
-                Latest Products
+                {dict.home.latest}
               </h2>
             </div>
 
@@ -61,7 +63,7 @@ export async function HomeContent() {
               href="/search"
               className="text-lg font-semibold px-16 group flex items-center gap-2"
             >
-              <span className="tracking-wider">More Latest Products</span>
+              <span className="tracking-wider">{dict.home.viewAllItems}</span>
               <ArrowRightIcon className="size-4 icon-scale" />
             </Link>
           </Button>
@@ -75,7 +77,7 @@ export async function HomeContent() {
             <div className="flex items-center gap-2">
               <StarIcon className="w-4 h-4 text-indigo-500" />
               <h2 className="text-lg tracking-wider font-semibold text-gradient_indigo-purple">
-                Featured Products
+                {dict.home.hot}
               </h2>
             </div>
 
@@ -92,7 +94,7 @@ export async function HomeContent() {
               href="/search?f=featured%3D%3Dtrue"
               className="text-lg font-semibold px-16 group flex items-center gap-2"
             >
-              <span className="tracking-wider">More Featured Products</span>
+              <span className="tracking-wider">{dict.home.viewAllItems}</span>
               <ArrowRightIcon className="size-4 icon-scale" />
             </Link>
           </Button>
@@ -106,7 +108,7 @@ export async function HomeContent() {
             <div className="flex items-center gap-2">
               <FileTextIcon className="w-4 h-4 text-indigo-500" />
               <h2 className="text-lg tracking-wider font-semibold text-gradient_indigo-purple">
-                Latest Posts
+                {dict.home.posts}
               </h2>
             </div>
 
@@ -123,7 +125,7 @@ export async function HomeContent() {
               href="/blog"
               className="text-lg font-semibold px-16 group flex items-center gap-2"
             >
-              <span className="tracking-wider">More Blog Posts</span>
+              <span className="tracking-wider">{dict.home.viewAllPosts}</span>
               <ArrowRightIcon className="size-4 icon-scale" />
             </Link>
           </Button>

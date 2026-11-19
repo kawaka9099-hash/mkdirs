@@ -11,7 +11,7 @@ type BlogCardProps = {
 };
 
 export default function BlogCard({ post }: BlogCardProps) {
-  const imageProps = post?.image ? urlForImage(post.image) : null;
+  const imageProps = post?.image ? urlForImage(post.image, 640) : null;
   const imageBlurDataURL = post?.image?.blurDataURL || null;
   const publishDate = post.publishDate || post._createdAt;
   const date = getLocaleDate(publishDate);

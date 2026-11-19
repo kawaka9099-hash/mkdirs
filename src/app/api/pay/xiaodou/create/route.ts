@@ -83,6 +83,7 @@ export async function POST(req: Request) {
       amountCents,
       clientIp,
       notifyUrl: absoluteUrl("/api/pay/xiaodou/notify"),
+      returnUrl: absoluteUrl(`/payment/${itemId}`),
     });
     return NextResponse.json({
       qrcode: result.qrcode,

@@ -32,8 +32,8 @@ export const priceConfig: PriceConfig = {
         "Premium customer support",
       ],
       limitations: [],
-      // 临时测试价 ¥0.1（实测小豆微信付款用，验完立刻改回 ¥68）
-      price: 0.1,
+      // 小豆支付人民币价（原 Stripe 美元价 $9.9），Stripe 已停用
+      price: 68,
       priceSuffix: "",
       stripePriceId: null,
     },

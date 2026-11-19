@@ -40,10 +40,24 @@ const LINK_LABEL_BY_TITLE: Record<string, string> = {
   Sitemap: "footer.sitemap",
 };
 
-export async function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
+interface FooterProps extends React.HTMLAttributes<HTMLElement> {
+  // Site appearance from Studio settings (Settings). Falls back to code defaults.
+  siteName?: string;
+  logoSrc?: string;
+  logoDarkSrc?: string;
+}
+
+export async function Footer({
+  className,
+  siteName,
+  logoSrc,
+  logoDarkSrc,
+}: FooterProps) {
   const { t } = await getServerT();
   // The Studio link opens the content backend: only ADMIN sees it.
   const isAdmin = (await currentRole()) === UserRole.ADMIN;
+
+  const displayName = siteName ?? siteConfig.name;
 
   return (
     <footer className={cn("border-t", className)}>
@@ -51,9 +65,9 @@ export async function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
         <div className="flex flex-col items-start col-span-full md:col-span-2">
           <div className="space-y-4">
             <div className="items-center space-x-2 flex">
-              <Logo />
+              <Logo src={logoSrc} srcDark={logoDarkSrc} />
 
-              <span className="text-xl font-bold">{siteConfig.name}</span>
+              <span className="text-xl font-bold">{displayName}</span>
             </div>
 
             <p className="text-muted-foreground text-base p4-4 md:pr-12">

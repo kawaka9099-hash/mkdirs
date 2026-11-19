@@ -13,11 +13,11 @@ export default function BuiltWithButton() {
         "px-4 rounded-md",
       )}
     >
-      <span>Built with</span>
+      <span>基于</span>
       <span>
         <LogoMkdirs className="size-4 rounded-full" />
       </span>
-      <span className="font-bold">Mkdirs</span>
+      <span className="font-bold">Mkdirs 构建</span>
     </Link>
   );
 }

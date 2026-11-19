@@ -21,7 +21,7 @@ import { useCurrentRole } from "@/hooks/use-current-role";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useScroll } from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
-import type { DashboardConfig, MarketingConfig } from "@/types";
+import type { DashboardConfig, MarketingConfig, NavItem } from "@/types";
 import { UserRole } from "@/types/user-role";
 import { ArrowRightIcon, MenuIcon } from "lucide-react";
 import Link from "next/link";
@@ -33,7 +33,19 @@ import { Logo } from "../logo";
 interface NavBarProps {
   scroll?: boolean;
   config: DashboardConfig | MarketingConfig;
+  // Site appearance from Studio settings (Settings).
+  // Everything falls back to the code defaults when unset.
+  siteName?: string;
+  logoSrc?: string;
+  logoDarkSrc?: string;
+  // Custom nav menus from Studio settings. When set and non-empty they
+  // replace config.menus (the Studio entry is still appended for ADMIN).
+  // Labels render literally, without dictionary translation.
+  customMenus?: { label: string; href: string }[];
 }
+
+// A menu item from Studio settings carries its literal label.
+type NavbarMenuItem = NavItem & { custom?: boolean };
 
 // Navbar menu labels come from the language dictionary, keyed by href.
 // Config titles stay as the fallback for any menu not listed here.
@@ -52,12 +64,19 @@ const MENU_LABEL_BY_HREF: Record<string, string> = {
   "/settings": "nav.settings",
 };
 
-export function Navbar({ scroll = false, config }: NavBarProps) {
+export function Navbar({
+  scroll = false,
+  config,
+  siteName,
+  logoSrc,
+  logoDarkSrc,
+  customMenus,
+}: NavBarProps) {
   const scrolled = useScroll(50);
   const user = useCurrentUser();
   const { t } = useLanguage();
-  const menuLabel = (item: { title: string; href: string }) =>
-    t(MENU_LABEL_BY_HREF[item.href] ?? item.title);
+  const menuLabel = (item: NavbarMenuItem) =>
+    item.custom ? item.title : t(MENU_LABEL_BY_HREF[item.href] ?? item.title);
   // console.log(`navbar: user:`, user);
 
   const pathname = usePathname();
@@ -65,10 +84,34 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
   // The Studio entry opens the content backend: only ADMIN sees it.
   // Everyone else (including logged-out visitors) never sees the link.
   const role = useCurrentRole();
-  const links = config.menus.filter(
+  const baseMenus: NavbarMenuItem[] =
+    customMenus && customMenus.length > 0
+      ? customMenus.map((menu) => ({
+          title: menu.label,
+          href: menu.href,
+          icon: "arrowRight" as const,
+          external: menu.href.startsWith("http"),
+          custom: true,
+        }))
+      : config.menus;
+  const links: NavbarMenuItem[] = baseMenus.filter(
     (item) => item.href !== "/studio" || role === UserRole.ADMIN,
   );
+  // Keep the Studio entry for ADMIN even with custom menus.
+  if (
+    role === UserRole.ADMIN &&
+    !links.some((item) => item.href === "/studio")
+  ) {
+    links.push({
+      title: "Studio",
+      href: "/studio",
+      icon: "studio",
+      external: true,
+    });
+  }
   // console.log(`Navbar, links: ${links.map((link) => link.title)}`);
+
+  const displayName = siteName ?? siteConfig.name;
 
   const isLinkActive = (href: string) => {
     if (href === "/") {
@@ -102,9 +145,9 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
           <div className="flex items-center gap-6 md:gap-10">
             {/* logo */}
             <Link href="/" className="flex items-center space-x-2">
-              <Logo />
+              <Logo src={logoSrc} srcDark={logoDarkSrc} />
 
-              <span className="text-xl font-bold">{siteConfig.name}</span>
+              <span className="text-xl font-bold">{displayName}</span>
             </Link>
 
             {/* links */}
@@ -112,7 +155,7 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
               <NavigationMenu>
                 <NavigationMenuList>
                   {links.map((item) => (
-                    <NavigationMenuItem key={item.title}>
+                    <NavigationMenuItem key={item.href}>
                       <NavigationMenuLink
                         href={item.disabled ? "#" : item.href}
                         target={item.external ? "_blank" : ""}
@@ -183,9 +226,9 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
                     className="flex items-center space-x-2 pl-4 pt-4"
                     onClick={() => setOpen(false)}
                   >
-                    <Logo />
+                    <Logo src={logoSrc} srcDark={logoDarkSrc} />
 
-                    <span className="text-xl font-bold">{siteConfig.name}</span>
+                    <span className="text-xl font-bold">{displayName}</span>
                   </Link>
 
                   <nav className="flex flex-1 flex-col gap-2 p-2 pt-8 font-medium">
@@ -193,7 +236,7 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
                       const Icon = Icons[item.icon || "arrowRight"];
                       return (
                         <Link
-                          key={item.title}
+                          key={item.href}
                           href={item.disabled ? "#" : item.href}
                           target={item.external ? "_blank" : ""}
                           onClick={() => {
@@ -224,9 +267,9 @@ export function Navbar({ scroll = false, config }: NavBarProps) {
               className="flex items-center space-x-2"
               onClick={() => setOpen(false)}
             >
-              <Logo className="size-8" />
+              <Logo className="size-8" src={logoSrc} srcDark={logoDarkSrc} />
 
-              <span className="text-xl font-bold">{siteConfig.name}</span>
+              <span className="text-xl font-bold">{displayName}</span>
             </Link>
           </div>
 

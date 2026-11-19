@@ -29,9 +29,49 @@ export function XiaodouPayButton({
   const [payType, setPayType] = useState<"wxpay" | "alipay">("wxpay");
   const [state, setState] = useState<PayState>("idle");
   const [qrcode, setQrcode] = useState("");
+  const [qrBroken, setQrBroken] = useState(false);
   const [error, setError] = useState("");
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const checkedOnMount = useRef(false);
+
+  const plan =
+    pricePlan.title.toLowerCase() === PricePlans.SPONSOR
+      ? PricePlans.SPONSOR
+      : PricePlans.PRO;
+
+  const checkPaid = async (t: "wxpay" | "alipay") => {
+    try {
+      const s = await fetch(
+        `/api/pay/xiaodou/status?itemId=${item._id}&plan=${plan}&type=${t}`,
+        { cache: "no-store" },
+      );
+      if (!s.ok) return false;
+      const sd = (await s.json()) as { paid?: boolean };
+      return sd?.paid === true;
+    } catch {
+      return false;
+    }
+  };
+
+  // 进页先查一次到账：回调丢了、或已在别处付过款时，打开页就能发现并跳发布页。
+  // 两种渠道都试（回跳回来时默认选中的不一定是付款用的那个）。
+  useEffect(() => {
+    if (checkedOnMount.current) return;
+    checkedOnMount.current = true;
+    (async () => {
+      if (await checkPaid(payType)) {
+        router.push(`/publish/${item._id}?pay=success`);
+        return;
+      }
+      const other = payType === "wxpay" ? "alipay" : "wxpay";
+      if (await checkPaid(other)) {
+        router.push(`/publish/${item._id}?pay=success`);
+      }
+    })();
+    // 只在挂载时查一次
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const stopPolling = () => {
     if (pollRef.current) {
@@ -45,11 +85,6 @@ export function XiaodouPayButton({
   };
 
   useEffect(() => stopPolling, []);
-
-  const plan =
-    pricePlan.title.toLowerCase() === PricePlans.SPONSOR
-      ? PricePlans.SPONSOR
-      : PricePlans.PRO;
 
   const startPay = async () => {
     setError("");
@@ -80,6 +115,7 @@ export function XiaodouPayButton({
         return;
       }
       setQrcode(data.qrcode);
+      setQrBroken(false);
       setState("waiting");
       pollRef.current = setInterval(async () => {
         try {
@@ -96,12 +132,12 @@ export function XiaodouPayButton({
           // 下次再查
         }
       }, 3000);
-      // 付款码 5 分钟后过期，停轮询
+      // 收银台订单 30 分钟有效，轮询跟它对齐（之前 5 分钟就停，付得晚就查不到）
       timeoutRef.current = setTimeout(() => {
         stopPolling();
         setError("付款码已过期，请重新下单");
         setState("idle");
-      }, 5 * 60 * 1000);
+      }, 30 * 60 * 1000);
     } catch {
       setError("网络异常，请稍后再试");
       setState("idle");
@@ -111,6 +147,11 @@ export function XiaodouPayButton({
   if (state === "waiting") {
     const isAppLink =
       qrcode.startsWith("weixin://") || qrcode.startsWith("alipays://");
+    // 网关有时给的不是二维码图片，而是收银台页面地址——当图片渲染就是破图。
+    const isImageUrl =
+      qrcode.startsWith("data:image/") ||
+      /\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(qrcode);
+    const isPageUrl = !isAppLink && !isImageUrl;
     return (
       <div className="flex flex-col items-center gap-3">
         {isAppLink ? (
@@ -120,6 +161,15 @@ export function XiaodouPayButton({
           >
             打开{payType === "wxpay" ? "微信" : "支付宝"}支付
           </a>
+        ) : isPageUrl || qrBroken ? (
+          <a
+            href={qrcode}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline underline-offset-4"
+          >
+            前往收银台扫码支付
+          </a>
         ) : (
           <Image
             src={qrcode}
@@ -127,6 +177,7 @@ export function XiaodouPayButton({
             width={200}
             height={200}
             unoptimized
+            onError={() => setQrBroken(true)}
           />
         )}
         <p className="text-sm text-muted-foreground">
