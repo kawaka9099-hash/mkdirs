@@ -32,9 +32,10 @@ export const priceConfig: PriceConfig = {
         "Premium customer support",
       ],
       limitations: [],
-      price: 9.9,
+      // 小豆支付人民币价（原 Stripe 美元价 $9.9），Stripe 已停用
+      price: 68,
       priceSuffix: "",
-      stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID,
+      stripePriceId: null,
     },
     {
       title: PricePlans.SPONSOR,
@@ -48,9 +49,10 @@ export const priceConfig: PriceConfig = {
         "Premium customer support",
       ],
       limitations: [],
-      price: 19.9,
-      priceSuffix: "/ week",
-      stripePriceId: process.env.NEXT_PUBLIC_STRIPE_SPONSOR_PRICE_ID,
+      // 小豆支付人民币价（原 Stripe 美元价 $19.9/周），Stripe 已停用
+      price: 139,
+      priceSuffix: "/ 周",
+      stripePriceId: null,
     },
   ],
 };

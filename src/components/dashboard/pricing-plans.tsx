@@ -59,7 +59,7 @@ const PricingPlanCard = ({ item, pricePlan }: PricingPlanCardProps) => {
           </span>
           <div className="flex items-baseline gap-2">
             <div className="text-4xl font-semibold font-workSans leading-relaxed text-primary">
-              ${pricePlan.price}
+              ¥{pricePlan.price}
             </div>
             <div className="text-sm font-semibold font-workSans leading-relaxed text-muted-foreground">
               {pricePlan.priceSuffix}
