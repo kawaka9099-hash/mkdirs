@@ -84,7 +84,7 @@ export function XiaodouPayButton({
       pollRef.current = setInterval(async () => {
         try {
           const s = await fetch(
-            `/api/pay/xiaodou/status?itemId=${item._id}&plan=${plan}`,
+            `/api/pay/xiaodou/status?itemId=${item._id}&plan=${plan}&type=${payType}`,
             { cache: "no-store" },
           );
           const sd = (await s.json()) as { paid?: boolean };

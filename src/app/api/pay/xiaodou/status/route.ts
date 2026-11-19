@@ -14,6 +14,7 @@ import {
   xiaodouOrderRef,
   xiaodouOutTradeNo,
   xiaodouQuery,
+  type XiaodouPayType,
 } from "@/lib/xiaodou";
 
 /**
@@ -26,11 +27,6 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "请先登录" }, { status: 401 });
   }
 
-  const config = getXiaodouConfig();
-  if (!config) {
-    return NextResponse.json({ error: "支付未配置" }, { status: 503 });
-  }
-
   const url = new URL(req.url);
   const itemId = url.searchParams.get("itemId") ?? "";
   const plan = (url.searchParams.get("plan") ?? "").toLowerCase();
@@ -39,6 +35,13 @@ export async function GET(req: Request) {
     (plan !== PricePlans.PRO && plan !== PricePlans.SPONSOR)
   ) {
     return NextResponse.json({ error: "参数错误" }, { status: 400 });
+  }
+
+  const payType: XiaodouPayType =
+    url.searchParams.get("type") === "wxpay" ? "wxpay" : "alipay";
+  const config = getXiaodouConfig(payType);
+  if (!config) {
+    return NextResponse.json({ error: "支付未配置" }, { status: 503 });
   }
 
   const item = await sanityFetch<ItemInfo>({

@@ -24,11 +24,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "请先登录" }, { status: 401 });
   }
 
-  const config = getXiaodouConfig();
-  if (!config) {
-    return NextResponse.json({ error: "支付未配置，请联系站长" }, { status: 503 });
-  }
-
   const body = (await req.json().catch(() => null)) as {
     itemId?: string;
     plan?: string;
@@ -43,6 +38,11 @@ export async function POST(req: Request) {
     (plan !== PricePlans.PRO && plan !== PricePlans.SPONSOR)
   ) {
     return NextResponse.json({ error: "参数错误" }, { status: 400 });
+  }
+
+  const config = getXiaodouConfig(payType);
+  if (!config) {
+    return NextResponse.json({ error: "支付未配置，请联系站长" }, { status: 503 });
   }
 
   const item = await sanityFetch<ItemInfo>({

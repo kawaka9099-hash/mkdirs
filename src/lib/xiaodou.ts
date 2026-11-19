@@ -10,7 +10,10 @@ import { priceConfig } from "@/config/price";
  * trade_status 须为 TRADE_SUCCESS，成功后网关要求回 "success"。
  *
  * 商户值只从环境变量读，绝不写进代码：
- * XIAODOU_GATEWAY_URL / XIAODOU_PID / XIAODOU_KEY / XIAODOU_CHANNEL_ID（可选）。
+ * 主配置（支付宝走新渠道）：XIAODOU_GATEWAY_URL / XIAODOU_PID / XIAODOU_KEY /
+ * XIAODOU_CHANNEL_ID（可选）。微信走老渠道（新渠道微信尚未开通）：
+ * XIAODOU_WXPAY_GATEWAY_URL / XIAODOU_WXPAY_PID / XIAODOU_WXPAY_KEY /
+ * XIAODOU_WXPAY_CHANNEL_ID（可选）；没配时微信回落主配置。
  */
 
 export type XiaodouPayType = "wxpay" | "alipay";
@@ -22,7 +25,25 @@ export type XiaodouConfig = {
   channelId: string;
 };
 
-export function getXiaodouConfig(): XiaodouConfig | null {
+/** 按支付方式取商户配置：微信优先老渠道三值（配了才用），其余走主配置。 */
+export function getXiaodouConfig(
+  payType: XiaodouPayType = "alipay",
+): XiaodouConfig | null {
+  if (payType === "wxpay") {
+    const gatewayUrl = (process.env.XIAODOU_WXPAY_GATEWAY_URL ?? "")
+      .trim()
+      .replace(/\/$/, "");
+    const pid = (process.env.XIAODOU_WXPAY_PID ?? "").trim();
+    const key = (process.env.XIAODOU_WXPAY_KEY ?? "").trim();
+    if (gatewayUrl && pid && key) {
+      return {
+        gatewayUrl,
+        pid,
+        key,
+        channelId: (process.env.XIAODOU_WXPAY_CHANNEL_ID ?? "").trim(),
+      };
+    }
+  }
   const gatewayUrl = (process.env.XIAODOU_GATEWAY_URL ?? "")
     .trim()
     .replace(/\/$/, "");
