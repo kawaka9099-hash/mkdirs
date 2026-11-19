@@ -37,4 +37,30 @@ const markdownComponents = {
       {...props}
     />
   ),
+  // Medium-like reading type: serif body, larger size, looser line height.
+  // Headings stay sans semibold (Medium uses sans for headings).
+  p: ({ className, ...props }) => (
+    <p
+      className={cn(
+        "font-sourceSerif text-lg leading-8 [&:not(:first-child)]:mt-6",
+        className,
+      )}
+      {...props}
+    />
+  ),
+  li: ({ className, ...props }) => (
+    <li
+      className={cn("mt-2 font-sourceSerif text-lg leading-8", className)}
+      {...props}
+    />
+  ),
+  blockquote: ({ className, ...props }) => (
+    <blockquote
+      className={cn(
+        "mt-6 border-l-2 pl-6 font-sourceSerif text-lg italic leading-8 [&>*]:text-muted-foreground",
+        className,
+      )}
+      {...props}
+    />
+  ),
 };

@@ -75,8 +75,8 @@ export default async function PostPage({ params }: PostPageProps) {
     <div className="flex flex-col gap-8">
       {/* Content section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left column */}
-        <div className="lg:col-span-2 flex flex-col">
+        {/* Left column (blog post content, Medium-like reading width) */}
+        <div className="lg:col-span-2 flex flex-col max-w-[680px]">
           {/* Basic information */}
           <div className="space-y-8">
             {/* blog post image */}
@@ -98,10 +98,12 @@ export default async function PostPage({ params }: PostPageProps) {
             </div>
 
             {/* blog post title */}
-            <h1 className="text-3xl font-bold">{post.title}</h1>
+            <h1 className="text-4xl font-bold">{post.title}</h1>
 
             {/* blog post description */}
-            <p className="text-lg text-muted-foreground">{post.excerpt}</p>
+            <p className="font-sourceSerif text-xl text-muted-foreground">
+              {post.excerpt}
+            </p>
           </div>
 
           {/* blog post content */}
