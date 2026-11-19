@@ -188,6 +188,7 @@ export type Dictionary = {
     categoriesPlaceholder: string;
     tagsPlaceholder: string;
     descriptionPlaceholder: string;
+    introductionPlaceholder: string;
     aiAutofill: string;
     aiAutofillDesc: string;
     cancel: string;
@@ -587,6 +588,7 @@ const zh: Dictionary = {
     categoriesPlaceholder: "选择分类",
     tagsPlaceholder: "选择标签",
     descriptionPlaceholder: "输入产品的简短描述",
+    introductionPlaceholder: "在此输入详细介绍，支持 Markdown…",
     aiAutofill: "AI 自动填写",
     aiAutofillDesc:
       "要让 AI 根据链接自动填写表单吗？可能需要一些时间，请耐心等待。",
@@ -988,6 +990,7 @@ const en: Dictionary = {
     categoriesPlaceholder: "Select categories",
     tagsPlaceholder: "Select tags",
     descriptionPlaceholder: "Enter a brief description of your product",
+    introductionPlaceholder: "Enter the full introduction here, Markdown supported…",
     aiAutofill: "AI Autofill",
     aiAutofillDesc:
       "Would you like AI to automatically fill in the form by the URL? It may take some time, so please wait patiently.",
@@ -1391,6 +1394,7 @@ const ja: Dictionary = {
     categoriesPlaceholder: "カテゴリーを選択",
     tagsPlaceholder: "タグを選択",
     descriptionPlaceholder: "プロダクトの簡単な説明を入力",
+    introductionPlaceholder: "詳しい紹介文をここに入力してください。Markdown 対応…",
     aiAutofill: "AI 自動入力",
     aiAutofillDesc:
       "URL から AI がフォームを自動入力しますか？時間がかかる場合がありますので、しばらくお待ちください。",
@@ -1791,6 +1795,7 @@ const ko: Dictionary = {
     categoriesPlaceholder: "카테고리를 선택하세요",
     tagsPlaceholder: "태그를 선택하세요",
     descriptionPlaceholder: "제품에 대한 간단한 설명을 입력하세요",
+    introductionPlaceholder: "자세한 소개를 여기에 입력하세요. Markdown 지원…",
     aiAutofill: "AI 자동 입력",
     aiAutofillDesc:
       "AI가 URL을 기반으로 양식을 자동으로 입력할까요? 시간이 걸릴 수 있으니 잠시 기다려 주세요.",
@@ -2192,6 +2197,7 @@ const fr: Dictionary = {
     categoriesPlaceholder: "Choisir des catégories",
     tagsPlaceholder: "Choisir des tags",
     descriptionPlaceholder: "Saisissez une brève description de votre produit",
+    introductionPlaceholder: "Saisissez la présentation détaillée ici, Markdown pris en charge…",
     aiAutofill: "Remplissage auto par IA",
     aiAutofillDesc:
       "Souhaitez-vous que l'IA remplisse automatiquement le formulaire à partir de l'URL ? Cela peut prendre un moment, merci de patienter.",
@@ -2595,6 +2601,7 @@ const es: Dictionary = {
     categoriesPlaceholder: "Elegir categorías",
     tagsPlaceholder: "Elegir etiquetas",
     descriptionPlaceholder: "Introduce una breve descripción de tu producto",
+    introductionPlaceholder: "Escribe la presentación detallada aquí, compatible con Markdown…",
     aiAutofill: "Autocompletado con IA",
     aiAutofillDesc:
       "¿Quieres que la IA complete el formulario automáticamente a partir de la URL? Puede tardar un poco, ten paciencia.",
@@ -2998,6 +3005,7 @@ const pt: Dictionary = {
     categoriesPlaceholder: "Escolher categorias",
     tagsPlaceholder: "Escolher tags",
     descriptionPlaceholder: "Digite uma breve descrição do seu produto",
+    introductionPlaceholder: "Digite a apresentação detalhada aqui, Markdown suportado…",
     aiAutofill: "Preenchimento automático com IA",
     aiAutofillDesc:
       "Quer que a IA preencha o formulário automaticamente a partir da URL? Pode levar algum tempo, por favor aguarde.",
@@ -3401,6 +3409,7 @@ const de: Dictionary = {
     categoriesPlaceholder: "Kategorien auswählen",
     tagsPlaceholder: "Tags auswählen",
     descriptionPlaceholder: "Gib eine kurze Beschreibung deines Produkts ein",
+    introductionPlaceholder: "Geben Sie hier die ausführliche Vorstellung ein, Markdown wird unterstützt…",
     aiAutofill: "KI-Autoausfüllen",
     aiAutofillDesc:
       "Soll die KI das Formular anhand der URL automatisch ausfüllen? Das kann etwas dauern, bitte habe etwas Geduld.",

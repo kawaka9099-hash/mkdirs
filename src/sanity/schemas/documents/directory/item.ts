@@ -274,6 +274,9 @@ export default defineType({
       type: "reference",
       group: "status",
       to: [{ type: "order" }],
+      // 弱引用：删除订单时不挡、删除条目时订单的反向引用也不挡，
+      // 否则测试数据会像 2026-11-19 那样互相引用删不掉。
+      weak: true,
       hidden: ({ parent }) => !parent.paid,
       // readOnly: true,
     }),

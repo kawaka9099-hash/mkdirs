@@ -1,5 +1,6 @@
 "use client";
 
+import { useLanguage } from "@/i18n/language-provider";
 import { useCurrentRole } from "@/hooks/use-current-role";
 import { UserRole } from "@/types/user-role";
 import { LayoutDashboardIcon } from "lucide-react";
@@ -7,6 +8,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 
 export const DashboardButton = () => {
+  const { t } = useLanguage();
   const role = useCurrentRole();
   if (role !== UserRole.ADMIN) {
     return null;
@@ -26,7 +28,7 @@ export const DashboardButton = () => {
         className="flex items-center justify-center space-x-2"
       >
         <LayoutDashboardIcon className="w-4 h-4" />
-        <span>Studio</span>
+        <span>{t("nav.studio")}</span>
       </Link>
     </Button>
   );

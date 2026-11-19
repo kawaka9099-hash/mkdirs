@@ -1,5 +1,6 @@
 "use client";
 
+import { useLanguage } from "@/i18n/language-provider";
 import { useTheme } from "next-themes";
 import { useMemo } from "react";
 import React from "react";
@@ -34,6 +35,8 @@ interface CustomMdeProps {
 const CustomMde = React.forwardRef<HTMLDivElement, CustomMdeProps>(
   ({ value, onChange }, ref) => {
     const theme = useTheme();
+    const { t } = useLanguage();
+    const placeholder = t("submit.introductionPlaceholder");
 
     // https://github.com/RIP21/react-simplemde-editor?tab=readme-ov-file#options
     // useMemo to memoize options so they do not change on each rerender
@@ -47,7 +50,7 @@ const CustomMde = React.forwardRef<HTMLDivElement, CustomMdeProps>(
         status: false,
         autofocus: false,
         spellChecker: false,
-        placeholder: "Enter your content here...",
+        placeholder,
         toolbar: [
           "heading",
           "bold",
@@ -69,7 +72,7 @@ const CustomMde = React.forwardRef<HTMLDivElement, CustomMdeProps>(
           "text-foreground",
         ],
       } as SimpleMDE.Options;
-    }, []);
+    }, [placeholder]);
 
     return (
       <div ref={ref} data-theme={theme} style={{ maxWidth: "none" }}>

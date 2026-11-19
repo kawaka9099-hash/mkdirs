@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { siteConfig } from "@/config/site";
 import { getServerT } from "@/i18n/server";
+import { ProPlanStatus, SponsorPlanStatus } from "@/lib/submission";
 import { currentUser } from "@/lib/auth";
 import { constructMetadata } from "@/lib/metadata";
 import { sanityFetch } from "@/sanity/lib/fetch";
@@ -50,6 +51,18 @@ export default async function PlanPage({ params }: { params: { id: string } }) {
   if (item.submitter._id !== user.id) {
     console.error("PlanPage, user not match");
     return redirect("/dashboard");
+  }
+
+  // 已付款的条目不再停留在付款页：直接去发布（已发布过的回控制台）。
+  // 之前付款按钮里的进页检查只在未付款套餐的按钮上挂载，已付款的套餐
+  // 按钮会变成“去发布”，检查根本跑不到，这是它不跳转的根因。
+  if (
+    item.proPlanStatus === ProPlanStatus.SUCCESS ||
+    item.sponsorPlanStatus === SponsorPlanStatus.SUCCESS
+  ) {
+    return redirect(
+      item.publishDate ? "/dashboard" : `/publish/${id}?pay=success`,
+    );
   }
 
   return (

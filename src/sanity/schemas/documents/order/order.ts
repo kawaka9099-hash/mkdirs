@@ -19,6 +19,8 @@ const order = {
       title: "Item",
       type: "reference",
       to: [{ type: "item" }],
+      // 弱引用：见 item.ts 的 order 字段，互相强引用会让测试数据删不掉。
+      weak: true,
       validation: (rule) => rule.required(),
       readOnly: true,
     }),

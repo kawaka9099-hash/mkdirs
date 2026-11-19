@@ -50,6 +50,7 @@ type NavbarMenuItem = NavItem & { custom?: boolean };
 // Navbar menu labels come from the language dictionary, keyed by href.
 // Config titles stay as the fallback for any menu not listed here.
 const MENU_LABEL_BY_HREF: Record<string, string> = {
+  "/": "nav.home",
   "/home2": "nav.home2",
   "/home3": "nav.home3",
   "/search": "nav.search",
